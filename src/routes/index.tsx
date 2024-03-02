@@ -5,12 +5,13 @@ export default component$(() => {
   return <h1>index</h1>;
 });
 
+// noinspection JSUnusedGlobalSymbols
 export const head: DocumentHead = {
-  title: "Welcome to Qwik",
+  title: "Wallaby",
   meta: [
     {
       name: "description",
-      content: "Qwik site description",
+      content: "Wallaby",
     },
   ],
 };
