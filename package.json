@@ -10,6 +10,7 @@
   ],
   "type": "module",
   "scripts": {
+    "bindings": "cf-bindings-proxy --d1=DB",
     "build": "qwik build",
     "build.client": "vite build",
     "build.preview": "vite build --ssr src/entry.preview.tsx",
@@ -29,11 +30,13 @@
   "devDependencies": {
     "@builder.io/qwik": "^1.4.5",
     "@builder.io/qwik-city": "^1.4.5",
+    "@cloudflare/workers-types": "^4.20240222.0",
     "@types/eslint": "^8.56.2",
     "@types/node": "^20.11.6",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
     "@typescript-eslint/parser": "^6.19.1",
     "autoprefixer": "^10.4.14",
+    "cf-bindings-proxy": "^0.7.1",
     "eslint": "^8.56.0",
     "eslint-plugin-qwik": "^1.4.5",
     "eslint-plugin-simple-import-sort": "^12.0.0",
