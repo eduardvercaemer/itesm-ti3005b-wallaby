@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Sources" pattern="!file[itesm-ti3005b-wallaby]:*/||file:package.json||file:README.md||file[itesm-ti3005b-wallaby]:src/components//*||file[itesm-ti3005b-wallaby]:src/routes//*" />
+</component>
