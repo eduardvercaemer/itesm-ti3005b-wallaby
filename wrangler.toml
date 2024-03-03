@@ -1,0 +1,7 @@
+[[d1_databases]]
+binding = "DB"
+database_name = "itesm-ti3005b-wallaby-prod"
+database_id = "1f5c6b17-8f36-4d59-b158-ad993efcc24a"
+preview_database_id = "DB"
+migrations_table = "d1_migrations"
+migrations_dir = "migrations"

@@ -10,7 +10,7 @@
   ],
   "type": "module",
   "scripts": {
-    "bindings": "cf-bindings-proxy --d1=DB",
+    "bindings": "cf-bindings-proxy",
     "build": "qwik build",
     "build.client": "vite build",
     "build.preview": "vite build --ssr src/entry.preview.tsx",
