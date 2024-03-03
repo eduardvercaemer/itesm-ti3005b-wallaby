@@ -10,9 +10,11 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
 export default component$(() => {
   return (
     <>
-      <main>
-        <Slot />
-      </main>
+      <div class="flex h-screen flex-col">
+        <main class="flex flex-grow flex-col">
+          <Slot />
+        </main>
+      </div>
     </>
   );
 });
