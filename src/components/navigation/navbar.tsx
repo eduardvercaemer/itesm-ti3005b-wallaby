@@ -9,7 +9,7 @@ export const Navbar = component$(() => {
   const signOut = useAuthSignout();
 
   return (
-    <div class="navbar bg-base-100">
+    <div class="navbar bg-primary text-primary-content">
       <div class="flex-1">
         <a class="btn btn-ghost text-xl">Wallaby</a>
       </div>
