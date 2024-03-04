@@ -1,10 +1,15 @@
 import { component$ } from "@builder.io/qwik";
-import { Form } from "@builder.io/qwik-city";
+import type { ActionStore } from "@builder.io/qwik-city";
+import { Form, Link } from "@builder.io/qwik-city";
 
 import { IcRoundLogOut } from "~/components/icons/round-log-out";
 import { useAuthSession, useAuthSignout } from "~/routes/plugin@10-auth";
 
-export const Navbar = component$(() => {
+export interface NavbarProps {
+  updateDatabaseIdAction: ActionStore<any, any, any>;
+}
+
+export const Navbar = component$((props: NavbarProps) => {
   const session = useAuthSession();
   const signOut = useAuthSignout();
 
@@ -14,6 +19,17 @@ export const Navbar = component$(() => {
         <a class="btn btn-ghost text-xl">Wallaby</a>
       </div>
       <div class="flex-none gap-2">
+        <Form class="flex gap-1" action={props.updateDatabaseIdAction}>
+          <input
+            type="text"
+            placeholder="Database ID"
+            class="input input-bordered w-24 md:w-auto"
+            name="databaseId"
+          />
+          <button type="submit" class="btn btn-warning">
+            Load
+          </button>
+        </Form>
         <div class="form-control">
           <input
             type="text"
@@ -39,9 +55,15 @@ export const Navbar = component$(() => {
             class="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
           >
             <li>
+              <Link href="/app/scheduler">Horarios</Link>
+            </li>
+            <li>
+              <Link href="/app/settings">Ajustes</Link>
+            </li>
+            <li>
               <Form action={signOut} class="flex justify-between text-error">
                 <input type="hidden" name="callbackUrl" value="/" />
-                <button>Cerrar Sesión</button>
+                <button type="submit">Cerrar Sesión</button>
                 <IcRoundLogOut />
               </Form>
             </li>

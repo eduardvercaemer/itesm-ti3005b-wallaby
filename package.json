@@ -55,6 +55,7 @@
   },
   "dependencies": {
     "@modular-forms/qwik": "^0.23.1",
+    "@notionhq/client": "^2.2.14",
     "daisyui": "^4.7.2"
   }
 }
