@@ -1,9 +1,12 @@
 import { component$ } from "@builder.io/qwik";
+import { Form } from "@builder.io/qwik-city";
 
-import { useAuthSession } from "~/routes/plugin@10-auth";
+import { IcRoundLogOut } from "~/components/icons/round-log-out";
+import { useAuthSession, useAuthSignout } from "~/routes/plugin@10-auth";
 
 export const Navbar = component$(() => {
   const session = useAuthSession();
+  const signOut = useAuthSignout();
 
   return (
     <div class="navbar bg-base-100">
@@ -36,16 +39,11 @@ export const Navbar = component$(() => {
             class="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
           >
             <li>
-              <a class="justify-between">
-                Profile
-                <span class="badge">New</span>
-              </a>
-            </li>
-            <li>
-              <a>Settings</a>
-            </li>
-            <li>
-              <a>Logout</a>
+              <Form action={signOut} class="flex justify-between text-error">
+                <input type="hidden" name="callbackUrl" value="/" />
+                <button>Cerrar Sesión</button>
+                <IcRoundLogOut />
+              </Form>
             </li>
           </ul>
         </div>
