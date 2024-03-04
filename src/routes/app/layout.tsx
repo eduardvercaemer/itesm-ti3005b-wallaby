@@ -17,9 +17,11 @@ export const onRequest: RequestHandler = (event) => {
 
 export default component$(() => {
   return (
-    <>
+    <div class="flex h-screen w-screen flex-col">
       <Navbar />
-      <Slot />
-    </>
+      <main class="flex grow flex-col">
+        <Slot />
+      </main>
+    </div>
   );
 });
