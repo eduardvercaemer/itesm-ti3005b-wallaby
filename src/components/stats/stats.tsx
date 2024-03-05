@@ -6,7 +6,8 @@ import { IcBaselineCollectionsBookmark } from "~/components/icons/baseline-colle
 export interface StatsProps {
   blockCount: number;
   totalBlockCount: number;
-  teacherCount: number;
+  freeTeacherCount: number;
+  totalTeacherCount: number;
 }
 
 export const Stats = component$((props: StatsProps) => {
@@ -25,9 +26,9 @@ export const Stats = component$((props: StatsProps) => {
         <div class="stat-figure text-secondary">
           <IcBaselineAccountCircle class="inline-block h-8 w-8 stroke-current" />
         </div>
-        <div class="stat-title">Maestros</div>
-        <div class="stat-value">{props.teacherCount}</div>
-        <div class="stat-desc"></div>
+        <div class="stat-title">Maestros Libres</div>
+        <div class="stat-value">{props.freeTeacherCount}</div>
+        <div class="stat-desc">/ {props.totalTeacherCount}</div>
       </div>
     </div>
   );

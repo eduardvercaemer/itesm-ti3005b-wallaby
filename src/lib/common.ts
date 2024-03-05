@@ -217,16 +217,28 @@ async function getSchedule(
   notion: Client,
   databaseId: string,
   date_: Date,
-  options?: {
-    forceReload: boolean;
-  },
+  options?: { forceReload?: boolean; start: string | null; end: string | null },
 ) {
-  const fullSchedule = await getFullSchedule(db, notion, databaseId, options);
+  const fullSchedule = await getFullSchedule(db, notion, databaseId, {
+    forceReload: options?.forceReload ?? false,
+  });
+
   // Add 12 hours, otherwise midnight is considered the previous day
   const date = datePlus("12 hours", date_);
   const dayOfWeek = date.getDay();
   const dayName = DAYS[dayOfWeek];
-  const schedule = fullSchedule.filter((i) => i.day.includes(dayName));
+  let schedule = fullSchedule.filter((i) => i.day.includes(dayName));
+
+  if (options?.start && options?.end) {
+    schedule = schedule.filter((i) => {
+      const iStart = parseInt(i.start.replace(":", ""));
+      const iEnd = parseInt(i.end.replace(":", ""));
+      const start = parseInt(options.start!.replace(":", ""));
+      const end = parseInt(options.end!.replace(":", ""));
+      return (iStart >= start && iStart < end) || (iEnd > start && iEnd <= end);
+    });
+  }
+
   return { dayName, schedule, allBlocks: fullSchedule.length };
 }
 
@@ -234,7 +246,7 @@ export async function getScheduleDetails(
   db: D1Database,
   notion: Client,
   date: Date,
-  options?: { forceReload: boolean },
+  options?: { forceReload?: boolean; start: string | null; end: string | null },
 ) {
   const databaseId = await getDatabaseId(db);
 
@@ -247,15 +259,17 @@ export async function getScheduleDetails(
     notion,
     databaseId,
     date,
-    {
-      forceReload: options?.forceReload ?? false,
-    },
+    options,
   );
 
-  const teachers = await getTeachers(db, notion, {
+  const allTeachers = await getTeachers(db, notion, {
     databaseId,
     forceReload: options?.forceReload ?? false,
   });
 
-  return { dayName, schedule, allBlocks, teachers };
+  const busyTeachers = schedule.flatMap((i) => i.teacher);
+
+  const freeTeachers = allTeachers.filter((i) => !busyTeachers.includes(i));
+
+  return { dayName, schedule, allBlocks, allTeachers, freeTeachers };
 }

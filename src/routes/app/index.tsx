@@ -8,11 +8,15 @@ import { notion } from "~/routes/plugin@02-notion";
 
 export const useNotionLoader = routeLoader$(async (e) => {
   const dateString = e.query.get("date");
+  const startString = e.query.get("start");
+  const endString = e.query.get("end");
+
   if (!dateString) {
     return {
       dayName: null,
       allBlocks: 0,
-      teachers: [],
+      allTeachers: [],
+      freeTeachers: [],
       schedule: [],
       status: "NO_DATE",
     };
@@ -23,14 +27,15 @@ export const useNotionLoader = routeLoader$(async (e) => {
   const db = database(e);
   const no = notion(e);
   try {
-    const { dayName, teachers, allBlocks, schedule } = await getScheduleDetails(
-      db,
-      no,
-      date,
-    );
+    const { dayName, allTeachers, freeTeachers, allBlocks, schedule } =
+      await getScheduleDetails(db, no, date, {
+        start: startString,
+        end: endString,
+      });
     return {
       dayName,
-      teachers,
+      allTeachers,
+      freeTeachers,
       allBlocks,
       schedule,
       status: "READY",
@@ -40,7 +45,8 @@ export const useNotionLoader = routeLoader$(async (e) => {
       return {
         dayName: null,
         allBlocks: 0,
-        teachers: [],
+        allTeachers: [],
+        freeTeachers: [],
         schedule: [],
         status: "MISSING_DATABASE_ID",
       };
@@ -55,7 +61,7 @@ export default component$(() => {
   const navigate = useNavigate();
   const notionData = useNotionLoader();
 
-  if (location.isNavigating) {
+  if (location.isNavigating && false) {
     return (
       <div class="hero min-h-screen bg-base-200">
         <div class="hero-content text-center">
@@ -94,7 +100,8 @@ export default component$(() => {
     <div class="m-2 flex flex-col gap-2">
       <div class="flex justify-around px-8">
         <Stats
-          teacherCount={notionData.value.teachers.length}
+          freeTeacherCount={notionData.value.freeTeachers.length}
+          totalTeacherCount={notionData.value.allTeachers.length}
           blockCount={notionData.value.schedule.length}
           totalBlockCount={notionData.value.allBlocks}
         />
@@ -102,7 +109,7 @@ export default component$(() => {
 
       <h1>maestros</h1>
       <ul class="flex gap-2">
-        {notionData.value.teachers.map((i) => (
+        {notionData.value.allTeachers.map((i) => (
           <li key={i} class="badge badge-accent">
             {i}
           </li>
@@ -155,6 +162,7 @@ export default component$(() => {
                 <td>
                   <button
                     class="btn btn-outline btn-secondary btn-xs"
+                    disabled={location.isNavigating}
                     onClick$={() => {
                       const date = new Date(
                         location.url.searchParams.get("date")!,
@@ -165,8 +173,7 @@ export default component$(() => {
                           "&start=" +
                           i.start +
                           "&end=" +
-                          i.end +
-                          "&sup",
+                          i.end,
                       );
                     }}
                   >
