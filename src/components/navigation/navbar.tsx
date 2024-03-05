@@ -2,6 +2,7 @@ import { component$ } from "@builder.io/qwik";
 import type { ActionStore } from "@builder.io/qwik-city";
 import { Form, Link } from "@builder.io/qwik-city";
 
+import { IcOutlineSettings } from "~/components/icons/outline-settings";
 import { IcRoundLogOut } from "~/components/icons/round-log-out";
 import { useAuthSession, useAuthSignout } from "~/routes/plugin@10-auth";
 
@@ -58,7 +59,10 @@ export const Navbar = component$((props: NavbarProps) => {
               <Link href="/app/scheduler">Horarios</Link>
             </li>
             <li>
-              <Link href="/app/settings">Ajustes</Link>
+              <Link href="/app/settings" class="flex justify-between">
+                <span>Ajustes</span>
+                <IcOutlineSettings />
+              </Link>
             </li>
             <li>
               <Form action={signOut} class="flex justify-between text-error">
