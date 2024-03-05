@@ -17,7 +17,7 @@ export const Navbar = component$((props: NavbarProps) => {
   return (
     <div class="navbar bg-primary text-primary-content">
       <div class="flex-1">
-        <Link href="/" class="btn btn-ghost text-xl">
+        <Link href="/app" class="btn btn-ghost text-xl">
           Wallaby
         </Link>
       </div>
