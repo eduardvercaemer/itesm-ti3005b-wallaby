@@ -116,12 +116,15 @@ export default component$(() => {
               <th>Maestro</th>
               <th>Grado</th>
               <th>Salón</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {notionData.value.schedule.map((i) => (
               <tr key={i.id}>
-                <td>{i.title}</td>
+                <th role="row" class="font-bold">
+                  {i.title}
+                </th>
                 <td class="flex gap-1">
                   {DAYS.map((d) => (
                     <span
@@ -144,6 +147,11 @@ export default component$(() => {
                 </td>
                 <td>{i.grade}</td>
                 <td>{i.room}</td>
+                <td>
+                  <button class="btn btn-outline btn-secondary btn-xs">
+                    Suplir
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
