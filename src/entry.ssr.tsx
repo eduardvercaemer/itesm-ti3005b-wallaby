@@ -22,6 +22,9 @@ export default function (opts: RenderToStreamOptions) {
   return renderToStream(<Root />, {
     manifest,
     ...opts,
+    qwikLoader: {
+      events: ["changeDate"],
+    },
     // Use container attributes to set attributes on the html tag.
     containerAttributes: {
       lang: "en-us",

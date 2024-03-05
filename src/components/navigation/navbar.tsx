@@ -1,5 +1,6 @@
 import { component$ } from "@builder.io/qwik";
 import type { ActionStore } from "@builder.io/qwik-city";
+import { useNavigate } from "@builder.io/qwik-city";
 import { Form, Link } from "@builder.io/qwik-city";
 
 import { DatepickerInput } from "~/components/datepicker/datepicker";
@@ -14,6 +15,7 @@ export interface NavbarProps {
 export const Navbar = component$((props: NavbarProps) => {
   const session = useAuthSession();
   const signOut = useAuthSignout();
+  const navigate = useNavigate();
 
   return (
     <div class="navbar bg-primary text-primary-content">
@@ -23,7 +25,11 @@ export const Navbar = component$((props: NavbarProps) => {
         </Link>
       </div>
       <div class="flex-none gap-2">
-        <DatepickerInput />
+        <DatepickerInput
+          onDate$={(date) =>
+            navigate("/app?date=" + date.toISOString().split("T", 1)[0])
+          }
+        />
         <Form class="flex gap-1" action={props.updateDatabaseIdAction}>
           <input
             type="text"
