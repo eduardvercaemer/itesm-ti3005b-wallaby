@@ -20,7 +20,7 @@ export const useNotionLoader = routeLoader$(async (e) => {
   const db = database(e);
   const no = notion(e);
   try {
-    const { teachers, schedule } = await getScheduleDetails(db, no);
+    const { teachers, schedule } = await getScheduleDetails(db, no, date);
     return {
       teachers,
       schedule,

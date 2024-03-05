@@ -8,14 +8,14 @@ export interface DatepickerProps {
 }
 
 export const DatepickerInput = component$(
-  (props: DatepickerProps & PropsOf<"input">) => {
+  ({ initialDate, onDate$, ...props }: DatepickerProps & PropsOf<"input">) => {
     const ref = useSignal<HTMLInputElement>();
 
     // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(({ cleanup }) => {
       const datepicker = new Datepicker(ref.value!, {});
-      if (props.initialDate) {
-        datepicker.setDate(props.initialDate);
+      if (initialDate) {
+        datepicker.setDate(initialDate);
       }
       cleanup(() => datepicker.destroy());
     });
@@ -25,7 +25,7 @@ export const DatepickerInput = component$(
       <input
         {...props}
         on-changeDate$={(e: Event & { detail: { date: Date } }) => {
-          return props.onDate$(e.detail.date);
+          return onDate$(e.detail.date);
         }}
         ref={ref}
         type="text"

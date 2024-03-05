@@ -16,9 +16,9 @@ export function getSetting(setting: string) {
     const result = await db
       .prepare(
         `SELECT value
-       FROM setting
-       WHERE key = ?
-       LIMIT 1`,
+         FROM setting
+         WHERE key = ?
+         LIMIT 1`,
       )
       .bind(setting)
       .first<{ value: string | null }>();
@@ -35,8 +35,8 @@ export function setSetting(setting: string) {
     await db
       .prepare(
         `INSERT INTO setting (key, value)
-       VALUES (?, ?)
-       ON CONFLICT DO UPDATE SET value = excluded.value`,
+         VALUES (?, ?)
+         ON CONFLICT DO UPDATE SET value = excluded.value`,
       )
       .bind(setting, value)
       .run();
@@ -45,7 +45,14 @@ export function setSetting(setting: string) {
 
 export function deleteSetting(setting: string) {
   return async function (db: D1Database): Promise<void> {
-    await db.prepare(`DELETE FROM setting WHERE key = ?`).bind(setting).run();
+    await db
+      .prepare(
+        `DELETE
+                      FROM setting
+                      WHERE key = ?`,
+      )
+      .bind(setting)
+      .run();
   };
 }
 
@@ -120,6 +127,7 @@ const scheduleSchema = z
 async function getSchedule(
   db: D1Database,
   notion: Client,
+  date: Date,
   options?: { forceReload: boolean; databaseId: string },
 ): Promise<z.infer<typeof scheduleSchema>> {
   /// Attempt local cache
@@ -197,6 +205,7 @@ async function getTeachers(
 export async function getScheduleDetails(
   db: D1Database,
   notion: Client,
+  date: Date,
   options?: { forceReload: boolean },
 ) {
   const databaseId = await getDatabaseId(db);
@@ -205,7 +214,7 @@ export async function getScheduleDetails(
     throw new MissingDatabaseIdError();
   }
 
-  const schedule = await getSchedule(db, notion, {
+  const schedule = await getSchedule(db, notion, date, {
     databaseId,
     forceReload: options?.forceReload ?? false,
   });
