@@ -17,7 +17,9 @@ export const Navbar = component$((props: NavbarProps) => {
   return (
     <div class="navbar bg-primary text-primary-content">
       <div class="flex-1">
-        <a class="btn btn-ghost text-xl">Wallaby</a>
+        <Link href="/" class="btn btn-ghost text-xl">
+          Wallaby
+        </Link>
       </div>
       <div class="flex-none gap-2">
         <Form class="flex gap-1" action={props.updateDatabaseIdAction}>
