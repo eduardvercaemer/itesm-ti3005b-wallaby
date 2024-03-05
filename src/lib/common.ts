@@ -1,6 +1,7 @@
 import { D1Database } from "@cloudflare/workers-types";
 import { Client } from "@notionhq/client";
 import { z } from "@builder.io/qwik-city";
+import { datePlus } from "itty-time";
 
 export class MissingDatabaseIdError extends Error {
   constructor() {
@@ -124,11 +125,11 @@ const scheduleSchema = z
   })
   .transform((data) => data.results);
 
-async function getSchedule(
+async function getFullSchedule(
   db: D1Database,
   notion: Client,
-  date: Date,
-  options?: { forceReload: boolean; databaseId: string },
+  databaseId: string,
+  options?: { forceReload: boolean },
 ): Promise<z.infer<typeof scheduleSchema>> {
   /// Attempt local cache
   const cachedNotionSchedule = options?.forceReload
@@ -140,7 +141,6 @@ async function getSchedule(
     return await scheduleSchema.parseAsync(JSON.parse(cachedNotionSchedule));
   }
 
-  const databaseId = options?.databaseId || (await getDatabaseId(db));
   if (!databaseId) {
     throw new MissingDatabaseIdError();
   }
@@ -202,6 +202,32 @@ async function getTeachers(
   return teachers;
 }
 
+const DAYS = [
+  "Domingo",
+  "Lunes",
+  "Martes",
+  "Miercoles",
+  "Jueves",
+  "Viernes",
+  "Sabado",
+];
+
+async function getSchedule(
+  db: D1Database,
+  notion: Client,
+  databaseId: string,
+  date_: Date,
+  options?: {
+    forceReload: boolean;
+  },
+) {
+  const fullSchedule = await getFullSchedule(db, notion, databaseId, options);
+  // Add 12 hours, otherwise midnight is considered the previous day
+  const date = datePlus("12 hours", date_);
+  const dayOfWeek = date.getDay();
+  return fullSchedule.filter((i) => i.day.includes(DAYS[dayOfWeek]));
+}
+
 export async function getScheduleDetails(
   db: D1Database,
   notion: Client,
@@ -214,8 +240,7 @@ export async function getScheduleDetails(
     throw new MissingDatabaseIdError();
   }
 
-  const schedule = await getSchedule(db, notion, date, {
-    databaseId,
+  const schedule = await getSchedule(db, notion, databaseId, date, {
     forceReload: options?.forceReload ?? false,
   });
   const teachers = await getTeachers(db, notion, {

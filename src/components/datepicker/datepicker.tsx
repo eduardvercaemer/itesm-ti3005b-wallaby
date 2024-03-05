@@ -1,5 +1,6 @@
 import type { PropFunction, PropsOf } from "@builder.io/qwik";
 import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import { datePlus } from "itty-time";
 import { Datepicker } from "vanillajs-datepicker";
 
 export interface DatepickerProps {
@@ -15,7 +16,7 @@ export const DatepickerInput = component$(
     useVisibleTask$(({ cleanup }) => {
       const datepicker = new Datepicker(ref.value!, {});
       if (initialDate) {
-        datepicker.setDate(initialDate);
+        datepicker.setDate(datePlus("12 hours", initialDate));
       }
       cleanup(() => datepicker.destroy());
     });
