@@ -2,6 +2,7 @@ import { component$ } from "@builder.io/qwik";
 import type { ActionStore } from "@builder.io/qwik-city";
 import { Form, Link } from "@builder.io/qwik-city";
 
+import { DatepickerInput } from "~/components/datepicker/datepicker";
 import { IcOutlineSettings } from "~/components/icons/outline-settings";
 import { IcRoundLogOut } from "~/components/icons/round-log-out";
 import { useAuthSession, useAuthSignout } from "~/routes/plugin@10-auth";
@@ -22,6 +23,7 @@ export const Navbar = component$((props: NavbarProps) => {
         </Link>
       </div>
       <div class="flex-none gap-2">
+        <DatepickerInput />
         <Form class="flex gap-1" action={props.updateDatabaseIdAction}>
           <input
             type="text"
