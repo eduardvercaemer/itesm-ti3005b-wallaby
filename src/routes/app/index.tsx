@@ -1,5 +1,5 @@
 import { component$ } from "@builder.io/qwik";
-import { routeLoader$, useLocation } from "@builder.io/qwik-city";
+import { routeLoader$, useLocation, useNavigate } from "@builder.io/qwik-city";
 
 import { Stats } from "~/components/stats/stats";
 import { DAYS, getScheduleDetails, MissingDatabaseIdError } from "~/lib/common";
@@ -52,6 +52,7 @@ export const useNotionLoader = routeLoader$(async (e) => {
 
 export default component$(() => {
   const location = useLocation();
+  const navigate = useNavigate();
   const notionData = useNotionLoader();
 
   if (location.isNavigating) {
@@ -152,7 +153,23 @@ export default component$(() => {
                 <td>{i.grade}</td>
                 <td>{i.room}</td>
                 <td>
-                  <button class="btn btn-outline btn-secondary btn-xs">
+                  <button
+                    class="btn btn-outline btn-secondary btn-xs"
+                    onClick$={() => {
+                      const date = new Date(
+                        location.url.searchParams.get("date")!,
+                      );
+                      return navigate(
+                        "/app?date=" +
+                          date.toISOString().split("T", 1)[0] +
+                          "&start=" +
+                          i.start +
+                          "&end=" +
+                          i.end +
+                          "&sup",
+                      );
+                    }}
+                  >
                     Suplir
                   </button>
                 </td>
