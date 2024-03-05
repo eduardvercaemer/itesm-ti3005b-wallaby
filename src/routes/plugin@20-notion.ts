@@ -6,7 +6,8 @@ import { getUserAccessKey } from "~/lib/common";
 import { database } from "~/routes/plugin@01-database";
 
 export const onRequest: RequestHandler = async (e) => {
-  const session = e.sharedMap.get("session") as Session;
+  const session = e.sharedMap.get("session") as Session | undefined;
+  if (!session?.user) return;
   const db = database(e);
   const accessKey = await getUserAccessKey(db, session.user.id);
   if (!accessKey) return;
