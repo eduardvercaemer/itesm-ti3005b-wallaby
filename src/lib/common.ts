@@ -79,11 +79,23 @@ const scheduleSchema = z
             Salón: basicMultiSelectSchema,
             Inicio: basicTextSchema,
             Fin: basicTextSchema,
+            Titulo: z
+              .object({
+                type: z.literal("title"),
+                title: z.array(
+                  z.object({
+                    type: z.literal("text"),
+                    text: z.object({ content: z.string() }),
+                  }),
+                ),
+              })
+              .transform((i) => i.title[0].text.content),
           }),
         })
         .transform((i) => ({
           id: i.id,
           url: i.url,
+          title: i.properties.Titulo,
           grade: i.properties.Grado,
           teacher: i.properties.Maestro,
           day: i.properties.Dia,
