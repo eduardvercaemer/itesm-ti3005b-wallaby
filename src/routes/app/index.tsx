@@ -1,19 +1,39 @@
 import { component$ } from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
 
-import { getScheduleDetails } from "~/lib/common";
+import { getScheduleDetails, MissingDatabaseIdError } from "~/lib/common";
 import { database } from "~/routes/plugin@01-database";
 import { notion } from "~/routes/plugin@02-notion";
 
 export const useNotionLoader = routeLoader$(async (e) => {
   const db = database(e);
   const no = notion(e);
+  try {
+    const { teachers, schedule } = await getScheduleDetails(db, no);
+    return {
+      teachers,
+      schedule,
+      status: "READY",
+    };
+  } catch (err: unknown) {
+    if (err instanceof MissingDatabaseIdError) {
+      return {
+        teachers: [],
+        schedule: [],
+        status: "MISSING_DATABASE_ID",
+      };
+    }
 
-  return getScheduleDetails(db, no);
+    throw err;
+  }
 });
 
 export default component$(() => {
   const notionData = useNotionLoader();
+
+  if (notionData.value.status === "MISSING_DATABASE_ID") {
+    return <h1>Database ID not set</h1>;
+  }
 
   return (
     <>

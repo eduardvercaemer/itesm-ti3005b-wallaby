@@ -2,6 +2,13 @@ import { D1Database } from "@cloudflare/workers-types";
 import { Client } from "@notionhq/client";
 import { z } from "@builder.io/qwik-city";
 
+export class MissingDatabaseIdError extends Error {
+  constructor() {
+    super("Missing database ID");
+    this.name = MissingDatabaseIdError.name;
+  }
+}
+
 /// SETTINGS APIS
 
 export function getSetting(setting: string) {
@@ -127,7 +134,7 @@ async function getSchedule(
 
   const databaseId = options?.databaseId || (await getDatabaseId(db));
   if (!databaseId) {
-    throw new Error("missing databaseId");
+    throw new MissingDatabaseIdError();
   }
 
   const response = await notion.databases.query({
@@ -175,7 +182,7 @@ async function getTeachers(
 
   const databaseId = options?.databaseId || (await getDatabaseId(db));
   if (!databaseId) {
-    throw new Error("missing databaseId");
+    throw new MissingDatabaseIdError();
   }
 
   const response = await notion.databases.retrieve({ database_id: databaseId });
@@ -195,7 +202,7 @@ export async function getScheduleDetails(
   const databaseId = await getDatabaseId(db);
 
   if (!databaseId) {
-    throw new Error("missing databaseId");
+    throw new MissingDatabaseIdError();
   }
 
   const schedule = await getSchedule(db, notion, {
