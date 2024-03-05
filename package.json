@@ -54,6 +54,7 @@
     "wrangler": "^3.0.0"
   },
   "dependencies": {
+    "@auth/d1-adapter": "^0.7.0",
     "@modular-forms/qwik": "^0.23.1",
     "@notionhq/client": "^2.2.14",
     "@types/vanillajs-datepicker": "^1.3.4",

@@ -4,7 +4,7 @@ import { routeLoader$, useLocation, useNavigate } from "@builder.io/qwik-city";
 import { Stats } from "~/components/stats/stats";
 import { DAYS, getScheduleDetails, MissingDatabaseIdError } from "~/lib/common";
 import { database } from "~/routes/plugin@01-database";
-import { notion } from "~/routes/plugin@02-notion";
+import { notion } from "~/routes/plugin@20-notion";
 
 export const useNotionLoader = routeLoader$(async (e) => {
   const dateString = e.query.get("date");
