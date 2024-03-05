@@ -97,7 +97,7 @@ export default component$(() => {
   }
 
   return (
-    <div class="m-2 flex flex-col gap-2">
+    <div class="m-2 flex flex-col gap-4">
       <div class="flex justify-around px-8">
         <Stats
           freeTeacherCount={notionData.value.freeTeachers.length}
@@ -113,83 +113,84 @@ export default component$(() => {
         />
       </div>
 
-      <h1>maestros</h1>
-      <ul class="flex gap-2">
-        {notionData.value.allTeachers.map((i) => (
-          <li key={i} class="badge badge-accent">
-            {i}
-          </li>
-        ))}
-      </ul>
-
-      <h1>clases</h1>
-      <div class="overflow-x-auto">
-        <table class="table table-zebra">
-          <thead>
-            <tr>
-              <th>Clase</th>
-              <th>Días</th>
-              <th>Inicio</th>
-              <th>Fin</th>
-              <th>Maestro</th>
-              <th>Grado</th>
-              <th>Salón</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {notionData.value.schedule.map((i) => (
-              <tr key={i.id}>
-                <th role="row" class="font-bold">
-                  {i.title}
-                </th>
-                <td class="flex gap-1">
-                  {DAYS.map((d) => (
-                    <span
-                      class={[
-                        "badge",
-                        d === notionData.value.dayName ? "badge-primary" : "",
-                        i.day.includes(d) ? "" : "opacity-20",
-                      ]}
-                    >
-                      {d}
-                    </span>
-                  ))}
-                </td>
-                <td>{i.start}</td>
-                <td>{i.end}</td>
-                <td>
-                  {i.teacher.map((t) => (
-                    <span class="badge">{t}</span>
-                  ))}
-                </td>
-                <td>{i.grade}</td>
-                <td>{i.room}</td>
-                <td>
-                  <button
-                    class="btn btn-outline btn-secondary btn-xs"
-                    disabled={location.isNavigating}
-                    onClick$={() => {
-                      const date = new Date(
-                        location.url.searchParams.get("date")!,
-                      );
-                      return navigate(
-                        "/app?date=" +
-                          date.toISOString().split("T", 1)[0] +
-                          "&start=" +
-                          i.start +
-                          "&end=" +
-                          i.end,
-                      );
-                    }}
+      <table class="table table-zebra shadow-xl">
+        <thead>
+          <tr>
+            <th>Clase</th>
+            <th>Días</th>
+            <th>Inicio</th>
+            <th>Fin</th>
+            <th>Maestro</th>
+            <th>Grado</th>
+            <th>Salón</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {notionData.value.schedule.map((i) => (
+            <tr key={i.id}>
+              <th role="row" class="font-bold">
+                {i.title}
+              </th>
+              <td class="flex gap-1">
+                {DAYS.map((d) => (
+                  <span
+                    class={[
+                      "badge",
+                      d === notionData.value.dayName ? "badge-primary" : "",
+                      i.day.includes(d) ? "" : "opacity-20",
+                    ]}
                   >
-                    Suplir
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                    {d}
+                  </span>
+                ))}
+              </td>
+              <td>{i.start}</td>
+              <td>{i.end}</td>
+              <td>
+                {i.teacher.map((t) => (
+                  <span class="badge">{t}</span>
+                ))}
+              </td>
+              <td>{i.grade}</td>
+              <td>{i.room}</td>
+              <td>
+                <button
+                  class="btn btn-outline btn-secondary btn-xs"
+                  disabled={location.isNavigating}
+                  onClick$={() => {
+                    const date = new Date(
+                      location.url.searchParams.get("date")!,
+                    );
+                    return navigate(
+                      "/app?date=" +
+                        date.toISOString().split("T", 1)[0] +
+                        "&start=" +
+                        i.start +
+                        "&end=" +
+                        i.end,
+                    );
+                  }}
+                >
+                  Suplir
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div class="flex justify-center">
+        <div class="card w-96 bg-neutral text-neutral-content">
+          <div class="card-body items-center text-center">
+            <h2 class="card-title">Maestros Disponibles</h2>
+            <ul class="flex flex-wrap  gap-2">
+              {notionData.value.freeTeachers.map((t) => (
+                <li class="badge badge-primary">{t}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   );
