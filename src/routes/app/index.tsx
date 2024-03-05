@@ -104,6 +104,12 @@ export default component$(() => {
           totalTeacherCount={notionData.value.allTeachers.length}
           blockCount={notionData.value.schedule.length}
           totalBlockCount={notionData.value.allBlocks}
+          supEnd={location.url.searchParams.get("end") ?? null}
+          supStart={location.url.searchParams.get("start") ?? null}
+          onSupCancel$={() => {
+            const date = location.url.searchParams.get("date")!;
+            return navigate("/app?date=" + date);
+          }}
         />
       </div>
 
