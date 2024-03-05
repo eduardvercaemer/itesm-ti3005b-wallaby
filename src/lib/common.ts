@@ -202,7 +202,7 @@ async function getTeachers(
   return teachers;
 }
 
-const DAYS = [
+export const DAYS = [
   "Domingo",
   "Lunes",
   "Martes",

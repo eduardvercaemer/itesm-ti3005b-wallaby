@@ -1,7 +1,7 @@
 import { component$ } from "@builder.io/qwik";
 import { routeLoader$, useLocation } from "@builder.io/qwik-city";
 
-import { getScheduleDetails, MissingDatabaseIdError } from "~/lib/common";
+import { DAYS, getScheduleDetails, MissingDatabaseIdError } from "~/lib/common";
 import { database } from "~/routes/plugin@01-database";
 import { notion } from "~/routes/plugin@02-notion";
 
@@ -115,11 +115,12 @@ export default component$(() => {
               <tr key={i.id}>
                 <td>{i.title}</td>
                 <td class="flex gap-1">
-                  {i.day.map((d) => (
+                  {DAYS.map((d) => (
                     <span
                       class={[
                         "badge",
-                        d === notionData.value.dayName ? "badge-secondary" : "",
+                        d === notionData.value.dayName ? "badge-primary" : "",
+                        i.day.includes(d) ? "" : "opacity-20",
                       ]}
                     >
                       {d}
