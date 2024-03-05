@@ -10,6 +10,7 @@ import { useAuthSession, useAuthSignout } from "~/routes/plugin@10-auth";
 
 export interface NavbarProps {
   updateDatabaseIdAction: ActionStore<any, any, any>;
+  initialDate: Date | null;
 }
 
 export const Navbar = component$((props: NavbarProps) => {
@@ -26,6 +27,9 @@ export const Navbar = component$((props: NavbarProps) => {
       </div>
       <div class="flex-none gap-2">
         <DatepickerInput
+          class="input input-bordered w-24 md:w-auto"
+          placeholder="Fecha"
+          initialDate={props.initialDate}
           onDate$={(date) =>
             navigate("/app?date=" + date.toISOString().split("T", 1)[0])
           }
@@ -41,13 +45,6 @@ export const Navbar = component$((props: NavbarProps) => {
             Load
           </button>
         </Form>
-        <div class="form-control">
-          <input
-            type="text"
-            placeholder="Buscar"
-            class="input input-bordered w-24 md:w-auto"
-          />
-        </div>
         <div class="dropdown dropdown-end">
           <div
             tabIndex={0}

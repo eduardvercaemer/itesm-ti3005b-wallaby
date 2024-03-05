@@ -1,5 +1,6 @@
 import { component$, Slot } from "@builder.io/qwik";
 import type { RequestHandler } from "@builder.io/qwik-city";
+import { routeLoader$ } from "@builder.io/qwik-city";
 import { z, zod$ } from "@builder.io/qwik-city";
 import { routeAction$ } from "@builder.io/qwik-city";
 
@@ -18,6 +19,11 @@ export const useUpdateDatabaseIdAction = routeAction$(
   }),
 );
 
+export const useDateQuery = routeLoader$((e) => {
+  const dateString = e.query.get("date");
+  return dateString ? new Date(dateString) : null;
+});
+
 // noinspection JSUnusedGlobalSymbols
 export const onRequest: RequestHandler = async (event) => {
   authGuard(event);
@@ -25,10 +31,14 @@ export const onRequest: RequestHandler = async (event) => {
 
 export default component$(() => {
   const updateDatabaseId = useUpdateDatabaseIdAction();
+  const date = useDateQuery();
 
   return (
     <div class="flex h-screen w-screen flex-col">
-      <Navbar updateDatabaseIdAction={updateDatabaseId} />
+      <Navbar
+        updateDatabaseIdAction={updateDatabaseId}
+        initialDate={date.value}
+      />
       <main class="flex grow flex-col">
         <Slot />
       </main>
