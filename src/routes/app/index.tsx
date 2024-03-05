@@ -1,14 +1,15 @@
 import { component$ } from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
 
-import { getSchedule } from "~/lib/common";
+import { getScheduleDetails } from "~/lib/common";
 import { database } from "~/routes/plugin@01-database";
 import { notion } from "~/routes/plugin@02-notion";
 
 export const useNotionLoader = routeLoader$(async (e) => {
   const db = database(e);
   const no = notion(e);
-  return getSchedule(db, no);
+
+  return getScheduleDetails(db, no);
 });
 
 export default component$(() => {
@@ -16,6 +17,14 @@ export default component$(() => {
 
   return (
     <>
+      <h1>maestros</h1>
+      <ul class="flex gap-2">
+        {notionData.value.teachers.map((i) => (
+          <li key={i}>{i}</li>
+        ))}
+      </ul>
+
+      <h1>clases</h1>
       <div class="overflow-x-auto">
         <table class="table">
           <thead>
@@ -27,7 +36,7 @@ export default component$(() => {
             </tr>
           </thead>
           <tbody>
-            {notionData.value.map((i) => (
+            {notionData.value.schedule.map((i) => (
               <tr key={i.id}>
                 <td>{i.title}</td>
                 <td>{i.start}</td>

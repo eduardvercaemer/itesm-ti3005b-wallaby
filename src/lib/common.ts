@@ -48,6 +48,9 @@ export const setDatabaseId = setSetting("database_id");
 export const getNotionSchedule = getSetting("notion_schedule");
 export const setNotionSchedule = setSetting("notion_schedule");
 
+export const getNotionTeachers = getSetting("notion_teachers");
+export const setNotionTeachers = setSetting("notion_teachers");
+
 /// NOTION APIS
 
 const basicMultiSelectSchema = z
@@ -107,10 +110,10 @@ const scheduleSchema = z
   })
   .transform((data) => data.results);
 
-export async function getSchedule(
+async function getSchedule(
   db: D1Database,
   notion: Client,
-  options?: { forceReload: boolean },
+  options?: { forceReload: boolean; databaseId: string },
 ): Promise<z.infer<typeof scheduleSchema>> {
   /// Attempt local cache
   const cachedNotionSchedule = options?.forceReload
@@ -122,7 +125,7 @@ export async function getSchedule(
     return await scheduleSchema.parseAsync(JSON.parse(cachedNotionSchedule));
   }
 
-  const databaseId = await getDatabaseId(db);
+  const databaseId = options?.databaseId || (await getDatabaseId(db));
   if (!databaseId) {
     throw new Error("missing databaseId");
   }
@@ -134,4 +137,72 @@ export async function getSchedule(
   await setNotionSchedule(db, JSON.stringify(response));
 
   return schedule;
+}
+
+const teachersSchema = z
+  .object({
+    properties: z.object({
+      Maestro: z.object({
+        multi_select: z.object({
+          options: z.array(z.object({ name: z.string() })),
+        }),
+      }),
+    }),
+  })
+  .transform((data) =>
+    data.properties.Maestro.multi_select.options.map((i) => i.name),
+  );
+
+async function getTeachers(
+  db: D1Database,
+  notion: Client,
+  options?: {
+    forceReload: boolean;
+    databaseId: string;
+  },
+): Promise<z.infer<typeof teachersSchema>> {
+  const cachedNotionTeachers = options?.forceReload
+    ? null
+    : await getNotionTeachers(db);
+
+  if (cachedNotionTeachers) {
+    console.debug("USING CACHED TEACHERS");
+    return await teachersSchema.parseAsync(JSON.parse(cachedNotionTeachers));
+  }
+
+  const databaseId = options?.databaseId || (await getDatabaseId(db));
+  if (!databaseId) {
+    throw new Error("missing databaseId");
+  }
+
+  const response = await notion.databases.retrieve({ database_id: databaseId });
+  const teachers = await teachersSchema.parseAsync(response);
+
+  console.debug("UPDATING TEACHERS IN DATABASE");
+  await setNotionTeachers(db, JSON.stringify(response));
+
+  return teachers;
+}
+
+export async function getScheduleDetails(
+  db: D1Database,
+  notion: Client,
+  options?: { forceReload: boolean },
+) {
+  const databaseId = await getDatabaseId(db);
+
+  if (!databaseId) {
+    throw new Error("missing databaseId");
+  }
+
+  const schedule = await getSchedule(db, notion, {
+    databaseId,
+    forceReload: options?.forceReload ?? false,
+  });
+  const teachers = await getTeachers(db, notion, {
+    databaseId,
+    forceReload: options?.forceReload ?? false,
+  });
+
+  return { schedule, teachers };
 }
