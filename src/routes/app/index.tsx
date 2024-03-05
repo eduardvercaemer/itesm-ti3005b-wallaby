@@ -21,12 +21,18 @@ export default component$(() => {
           <thead>
             <tr>
               <th>Clase</th>
+              <th>Inicio</th>
+              <th>Fin</th>
+              <th>Maestro</th>
             </tr>
           </thead>
           <tbody>
             {notionData.value.map((i) => (
               <tr key={i.id}>
                 <td>{i.title}</td>
+                <td>{i.start}</td>
+                <td>{i.end}</td>
+                <td>{i.teacher}</td>
               </tr>
             ))}
           </tbody>
