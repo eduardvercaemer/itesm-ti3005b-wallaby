@@ -9,7 +9,7 @@ export const useNotionLoader = routeLoader$(async (e) => {
   const db = database(e);
   const no = notion(e);
 
-  return getScheduleDetails(db, no);
+  return getScheduleDetails(db, no, { forceReload: true });
 });
 
 export default component$(() => {

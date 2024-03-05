@@ -130,7 +130,10 @@ async function getSchedule(
     throw new Error("missing databaseId");
   }
 
-  const response = await notion.databases.query({ database_id: databaseId });
+  const response = await notion.databases.query({
+    database_id: databaseId,
+    sorts: [{ property: "Inicio", direction: "ascending" }],
+  });
   const schedule = await scheduleSchema.parseAsync(response);
 
   console.debug("UPDATING SCHEDULE IN DATABASE");
