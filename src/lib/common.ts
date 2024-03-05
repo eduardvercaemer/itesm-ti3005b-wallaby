@@ -49,8 +49,8 @@ export function deleteSetting(setting: string) {
     await db
       .prepare(
         `DELETE
-                      FROM setting
-                      WHERE key = ?`,
+         FROM setting
+         WHERE key = ?`,
       )
       .bind(setting)
       .run();
@@ -225,7 +225,9 @@ async function getSchedule(
   // Add 12 hours, otherwise midnight is considered the previous day
   const date = datePlus("12 hours", date_);
   const dayOfWeek = date.getDay();
-  return fullSchedule.filter((i) => i.day.includes(DAYS[dayOfWeek]));
+  const dayName = DAYS[dayOfWeek];
+  const schedule = fullSchedule.filter((i) => i.day.includes(dayName));
+  return { dayName, schedule };
 }
 
 export async function getScheduleDetails(
@@ -240,13 +242,20 @@ export async function getScheduleDetails(
     throw new MissingDatabaseIdError();
   }
 
-  const schedule = await getSchedule(db, notion, databaseId, date, {
-    forceReload: options?.forceReload ?? false,
-  });
+  const { dayName, schedule } = await getSchedule(
+    db,
+    notion,
+    databaseId,
+    date,
+    {
+      forceReload: options?.forceReload ?? false,
+    },
+  );
+
   const teachers = await getTeachers(db, notion, {
     databaseId,
     forceReload: options?.forceReload ?? false,
   });
 
-  return { schedule, teachers };
+  return { dayName, schedule, teachers };
 }

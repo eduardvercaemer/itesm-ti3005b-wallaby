@@ -9,6 +9,7 @@ export const useNotionLoader = routeLoader$(async (e) => {
   const dateString = e.query.get("date");
   if (!dateString) {
     return {
+      dayName: null,
       teachers: [],
       schedule: [],
       status: "NO_DATE",
@@ -20,8 +21,13 @@ export const useNotionLoader = routeLoader$(async (e) => {
   const db = database(e);
   const no = notion(e);
   try {
-    const { teachers, schedule } = await getScheduleDetails(db, no, date);
+    const { dayName, teachers, schedule } = await getScheduleDetails(
+      db,
+      no,
+      date,
+    );
     return {
+      dayName,
       teachers,
       schedule,
       status: "READY",
@@ -29,6 +35,7 @@ export const useNotionLoader = routeLoader$(async (e) => {
   } catch (err: unknown) {
     if (err instanceof MissingDatabaseIdError) {
       return {
+        dayName: null,
         teachers: [],
         schedule: [],
         status: "MISSING_DATABASE_ID",
@@ -109,7 +116,14 @@ export default component$(() => {
                 <td>{i.title}</td>
                 <td class="flex gap-1">
                   {i.day.map((d) => (
-                    <span class="badge">{d}</span>
+                    <span
+                      class={[
+                        "badge",
+                        d === notionData.value.dayName ? "badge-secondary" : "",
+                      ]}
+                    >
+                      {d}
+                    </span>
                   ))}
                 </td>
                 <td>{i.start}</td>
