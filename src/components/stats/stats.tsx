@@ -5,6 +5,7 @@ import { IcBaselineCollectionsBookmark } from "~/components/icons/baseline-colle
 
 export interface StatsProps {
   blockCount: number;
+  totalBlockCount: number;
   teacherCount: number;
 }
 
@@ -15,16 +16,16 @@ export const Stats = component$((props: StatsProps) => {
         <div class="stat-figure text-secondary">
           <IcBaselineCollectionsBookmark class="inline-block h-8 w-8 stroke-current" />
         </div>
-        <div class="stat-title">Total de Bloques</div>
+        <div class="stat-title">Bloques de Clase</div>
         <div class="stat-value">{props.blockCount}</div>
-        <div class="stat-desc"></div>
+        <div class="stat-desc">/ {props.totalBlockCount}</div>
       </div>
 
       <div class="stat">
         <div class="stat-figure text-secondary">
           <IcBaselineAccountCircle class="inline-block h-8 w-8 stroke-current" />
         </div>
-        <div class="stat-title">Total de Maestros</div>
+        <div class="stat-title">Maestros</div>
         <div class="stat-value">{props.teacherCount}</div>
         <div class="stat-desc"></div>
       </div>

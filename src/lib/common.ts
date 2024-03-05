@@ -227,7 +227,7 @@ async function getSchedule(
   const dayOfWeek = date.getDay();
   const dayName = DAYS[dayOfWeek];
   const schedule = fullSchedule.filter((i) => i.day.includes(dayName));
-  return { dayName, schedule };
+  return { dayName, schedule, allBlocks: fullSchedule.length };
 }
 
 export async function getScheduleDetails(
@@ -242,7 +242,7 @@ export async function getScheduleDetails(
     throw new MissingDatabaseIdError();
   }
 
-  const { dayName, schedule } = await getSchedule(
+  const { dayName, schedule, allBlocks } = await getSchedule(
     db,
     notion,
     databaseId,
@@ -257,5 +257,5 @@ export async function getScheduleDetails(
     forceReload: options?.forceReload ?? false,
   });
 
-  return { dayName, schedule, teachers };
+  return { dayName, schedule, allBlocks, teachers };
 }

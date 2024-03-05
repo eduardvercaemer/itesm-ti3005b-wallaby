@@ -11,6 +11,7 @@ export const useNotionLoader = routeLoader$(async (e) => {
   if (!dateString) {
     return {
       dayName: null,
+      allBlocks: 0,
       teachers: [],
       schedule: [],
       status: "NO_DATE",
@@ -22,7 +23,7 @@ export const useNotionLoader = routeLoader$(async (e) => {
   const db = database(e);
   const no = notion(e);
   try {
-    const { dayName, teachers, schedule } = await getScheduleDetails(
+    const { dayName, teachers, allBlocks, schedule } = await getScheduleDetails(
       db,
       no,
       date,
@@ -30,6 +31,7 @@ export const useNotionLoader = routeLoader$(async (e) => {
     return {
       dayName,
       teachers,
+      allBlocks,
       schedule,
       status: "READY",
     };
@@ -37,6 +39,7 @@ export const useNotionLoader = routeLoader$(async (e) => {
     if (err instanceof MissingDatabaseIdError) {
       return {
         dayName: null,
+        allBlocks: 0,
         teachers: [],
         schedule: [],
         status: "MISSING_DATABASE_ID",
@@ -92,6 +95,7 @@ export default component$(() => {
         <Stats
           teacherCount={notionData.value.teachers.length}
           blockCount={notionData.value.schedule.length}
+          totalBlockCount={notionData.value.allBlocks}
         />
       </div>
 
