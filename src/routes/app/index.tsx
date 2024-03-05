@@ -1,11 +1,22 @@
 import { component$ } from "@builder.io/qwik";
-import { routeLoader$ } from "@builder.io/qwik-city";
+import { routeLoader$, useLocation } from "@builder.io/qwik-city";
 
 import { getScheduleDetails, MissingDatabaseIdError } from "~/lib/common";
 import { database } from "~/routes/plugin@01-database";
 import { notion } from "~/routes/plugin@02-notion";
 
 export const useNotionLoader = routeLoader$(async (e) => {
+  const dateString = e.query.get("date");
+  if (!dateString) {
+    return {
+      teachers: [],
+      schedule: [],
+      status: "NO_DATE",
+    };
+  }
+
+  const date = new Date(dateString);
+
   const db = database(e);
   const no = notion(e);
   try {
@@ -29,7 +40,39 @@ export const useNotionLoader = routeLoader$(async (e) => {
 });
 
 export default component$(() => {
+  const location = useLocation();
   const notionData = useNotionLoader();
+
+  if (location.isNavigating) {
+    return (
+      <div class="hero min-h-screen bg-base-200">
+        <div class="hero-content text-center">
+          <div class="max-w-md">
+            <h1 class="text-5xl font-bold">Procesando...</h1>
+            <p class="py-6">
+              <span class="loading loading-infinity loading-lg"></span>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (notionData.value.status === "NO_DATE") {
+    return (
+      <div class="hero min-h-screen bg-base-200">
+        <div class="hero-content text-center">
+          <div class="max-w-md">
+            <h1 class="text-5xl font-bold">Bienvenido</h1>
+            <p class="py-6">
+              Para comenzar selecciona una fecha para consultar el horario.
+              Utiliza el calendario en la barra de navegación.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (notionData.value.status === "MISSING_DATABASE_ID") {
     return <h1>Database ID not set</h1>;
