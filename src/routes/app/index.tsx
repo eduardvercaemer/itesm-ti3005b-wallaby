@@ -1,6 +1,7 @@
 import { component$ } from "@builder.io/qwik";
 import { routeLoader$, useLocation } from "@builder.io/qwik-city";
 
+import { Stats } from "~/components/stats/stats";
 import { DAYS, getScheduleDetails, MissingDatabaseIdError } from "~/lib/common";
 import { database } from "~/routes/plugin@01-database";
 import { notion } from "~/routes/plugin@02-notion";
@@ -86,7 +87,14 @@ export default component$(() => {
   }
 
   return (
-    <>
+    <div class="m-2 flex flex-col gap-2">
+      <div class="flex justify-around px-8">
+        <Stats
+          teacherCount={notionData.value.teachers.length}
+          blockCount={notionData.value.schedule.length}
+        />
+      </div>
+
       <h1>maestros</h1>
       <ul class="flex gap-2">
         {notionData.value.teachers.map((i) => (
@@ -141,6 +149,6 @@ export default component$(() => {
           </tbody>
         </table>
       </div>
-    </>
+    </div>
   );
 });
