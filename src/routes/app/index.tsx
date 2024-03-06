@@ -1,6 +1,7 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useContext } from "@builder.io/qwik";
 import { routeLoader$, useLocation, useNavigate } from "@builder.io/qwik-city";
 
+import { SettingShowDaysContext } from "~/components/settings-context/setting-show-days-context";
 import { Stats } from "~/components/stats/stats";
 import { DAYS, getScheduleDetails, MissingDatabaseIdError } from "~/lib/common";
 import { database } from "~/routes/plugin@01-database";
@@ -61,6 +62,7 @@ export default component$(() => {
   const location = useLocation();
   const navigate = useNavigate();
   const notionData = useNotionLoader();
+  const showDays = useContext(SettingShowDaysContext);
 
   if (location.isNavigating && false) {
     return (
@@ -120,8 +122,7 @@ export default component$(() => {
             <th>Clase</th>
             <th>Grado</th>
             <th>Salón</th>
-            <th>Días</th>
-            <th>Inicio</th>
+            {showDays.showDays.value && <th>Días</th>} <th>Inicio</th>
             <th>Fin</th>
             <th>Maestro</th>
             <th></th>
@@ -143,19 +144,21 @@ export default component$(() => {
                   <span class="badge">{room}</span>
                 ))}
               </td>
-              <td class="flex gap-1">
-                {DAYS.map((d) => (
-                  <span
-                    class={[
-                      "badge",
-                      d === notionData.value.dayName ? "badge-primary" : "",
-                      i.day.includes(d) ? "" : "opacity-20",
-                    ]}
-                  >
-                    {d}
-                  </span>
-                ))}
-              </td>
+              {showDays.showDays.value && (
+                <td class="flex gap-1">
+                  {DAYS.map((d) => (
+                    <span
+                      class={[
+                        "badge",
+                        d === notionData.value.dayName ? "badge-primary" : "",
+                        i.day.includes(d) ? "" : "opacity-20",
+                      ]}
+                    >
+                      {d}
+                    </span>
+                  ))}
+                </td>
+              )}
               <td>{i.start}</td>
               <td>{i.end}</td>
               <td>
