@@ -41,7 +41,7 @@ export const useNotionLoader = routeLoader$(async (e) => {
     } = await getScheduleDetails(db, no, date, {
       start: startString,
       end: endString,
-      forceReload: false,
+      forceReload: true,
     });
     return {
       dayName,
