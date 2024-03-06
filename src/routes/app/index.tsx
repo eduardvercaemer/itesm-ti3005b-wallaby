@@ -63,7 +63,7 @@ export default component$(() => {
   const navigate = useNavigate();
   const notionData = useNotionLoader();
   const showDays = useContext(SettingShowDaysContext);
-  const teacherFilter = useSignal<string>(null);
+  const teacherFilter = useSignal<string | undefined>(undefined);
 
   if (location.isNavigating && false) {
     return (
@@ -151,7 +151,7 @@ export default component$(() => {
               .filter((i) => {
                 if (
                   teacherFilter.value === "null" ||
-                  teacherFilter.value === null
+                  teacherFilter.value === undefined
                 ) {
                   return true;
                 }
