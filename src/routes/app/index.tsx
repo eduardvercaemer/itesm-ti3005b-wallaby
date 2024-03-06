@@ -19,6 +19,8 @@ export const useNotionLoader = routeLoader$(async (e) => {
       allTeachers: [],
       freeTeachers: [],
       schedule: [],
+      grades: [],
+      rooms: [],
       status: "NO_DATE",
     };
   }
@@ -28,18 +30,27 @@ export const useNotionLoader = routeLoader$(async (e) => {
   const db = database(e);
   const no = notion(e);
   try {
-    const { dayName, allTeachers, freeTeachers, allBlocks, schedule } =
-      await getScheduleDetails(db, no, date, {
-        start: startString,
-        end: endString,
-        forceReload: false,
-      });
+    const {
+      dayName,
+      allTeachers,
+      freeTeachers,
+      allBlocks,
+      schedule,
+      grades,
+      rooms,
+    } = await getScheduleDetails(db, no, date, {
+      start: startString,
+      end: endString,
+      forceReload: false,
+    });
     return {
       dayName,
       allTeachers,
       freeTeachers,
       allBlocks,
       schedule,
+      grades,
+      rooms,
       status: "READY",
     };
   } catch (err: unknown) {
@@ -50,6 +61,8 @@ export const useNotionLoader = routeLoader$(async (e) => {
         allTeachers: [],
         freeTeachers: [],
         schedule: [],
+        grades: [],
+        rooms: [],
         status: "MISSING_DATABASE_ID",
       };
     }
@@ -64,6 +77,8 @@ export default component$(() => {
   const notionData = useNotionLoader();
   const showDays = useContext(SettingShowDaysContext);
   const teacherFilter = useSignal<string | undefined>(undefined);
+  const roomFilter = useSignal<string | undefined>(undefined);
+  const gradeFilter = useSignal<string | undefined>(undefined);
 
   if (location.isNavigating && false) {
     return (
@@ -122,8 +137,42 @@ export default component$(() => {
           <thead>
             <tr>
               <th>Clase</th>
-              <th>Grado</th>
-              <th>Salón</th>
+              <th>
+                <div class="flex flex-col items-center gap-1">
+                  <span>Grado</span>
+
+                  <select
+                    bind:value={gradeFilter}
+                    class="select select-bordered select-secondary select-xs w-full max-w-xs"
+                  >
+                    <option value="null">---</option>
+
+                    {notionData.value.grades.map((t) => (
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </th>
+              <th>
+                <div class="flex flex-col items-center gap-1">
+                  <span>Salón</span>
+
+                  <select
+                    bind:value={roomFilter}
+                    class="select select-bordered select-secondary select-xs w-full max-w-xs"
+                  >
+                    <option value="null">---</option>
+
+                    {notionData.value.rooms.map((t) => (
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </th>
               {showDays.showDays.value && <th>Días</th>}
               <th>Inicio</th>
               <th>Fin</th>
@@ -150,12 +199,30 @@ export default component$(() => {
             {notionData.value.schedule
               .filter((i) => {
                 if (
-                  teacherFilter.value === "null" ||
-                  teacherFilter.value === undefined
+                  teacherFilter.value !== "null" &&
+                  teacherFilter.value !== undefined &&
+                  !i.teacher.includes(teacherFilter.value)
                 ) {
-                  return true;
+                  return false;
                 }
-                return i.teacher.includes(teacherFilter.value);
+
+                if (
+                  roomFilter.value !== "null" &&
+                  roomFilter.value !== undefined &&
+                  !i.room.includes(roomFilter.value)
+                ) {
+                  return false;
+                }
+
+                if (
+                  gradeFilter.value !== "null" &&
+                  gradeFilter.value !== undefined &&
+                  !i.grade.includes(gradeFilter.value)
+                ) {
+                  return false;
+                }
+
+                return true;
               })
               .map((i) => (
                 <tr key={i.id}>

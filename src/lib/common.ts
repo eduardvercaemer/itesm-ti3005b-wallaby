@@ -184,13 +184,29 @@ const teachersSchema = z
           options: z.array(z.object({ name: z.string() })),
         }),
       }),
+      Grado: z.object({
+        multi_select: z.object({
+          options: z.array(z.object({ name: z.string() })),
+        }),
+      }),
+      Salón: z.object({
+        multi_select: z.object({
+          options: z.array(z.object({ name: z.string() })),
+        }),
+      }),
     }),
   })
-  .transform((data) =>
-    data.properties.Maestro.multi_select.options.map((i) => i.name),
-  );
+  .transform((data) => ({
+    teachers: data.properties.Maestro.multi_select.options
+      .map((i) => i.name)
+      .sort(),
+    grades: data.properties.Grado.multi_select.options
+      .map((i) => i.name)
+      .sort(),
+    rooms: data.properties.Salón.multi_select.options.map((i) => i.name).sort(),
+  }));
 
-async function getTeachers(
+async function getFields(
   db: D1Database,
   notion: Client,
   options?: {
@@ -281,14 +297,22 @@ export async function getScheduleDetails(
     options,
   );
 
-  const allTeachers = await getTeachers(db, notion, {
+  const { grades, rooms, teachers } = await getFields(db, notion, {
     databaseId,
     forceReload: options?.forceReload ?? false,
   });
 
   const busyTeachers = schedule.flatMap((i) => i.teacher);
 
-  const freeTeachers = allTeachers.filter((i) => !busyTeachers.includes(i));
+  const freeTeachers = teachers.filter((i) => !busyTeachers.includes(i));
 
-  return { dayName, schedule, allBlocks, allTeachers, freeTeachers };
+  return {
+    dayName,
+    schedule,
+    allBlocks,
+    allTeachers: teachers,
+    freeTeachers,
+    grades,
+    rooms,
+  };
 }
