@@ -118,12 +118,12 @@ export default component$(() => {
         <thead>
           <tr>
             <th>Clase</th>
+            <th>Grado</th>
+            <th>Salón</th>
             <th>Días</th>
             <th>Inicio</th>
             <th>Fin</th>
             <th>Maestro</th>
-            <th>Grado</th>
-            <th>Salón</th>
             <th></th>
           </tr>
         </thead>
@@ -133,6 +133,16 @@ export default component$(() => {
               <th role="row" class="font-bold">
                 {i.title}
               </th>
+              <td>
+                {i.grade.map((grade) => (
+                  <span class="badge">{grade}</span>
+                ))}
+              </td>
+              <td>
+                {i.room.map((room) => (
+                  <span class="badge">{room}</span>
+                ))}
+              </td>
               <td class="flex gap-1">
                 {DAYS.map((d) => (
                   <span
@@ -153,8 +163,6 @@ export default component$(() => {
                   <span class="badge">{t}</span>
                 ))}
               </td>
-              <td>{i.grade}</td>
-              <td>{i.room}</td>
               <td>
                 <button
                   class="btn btn-outline btn-secondary btn-xs"
