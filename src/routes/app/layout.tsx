@@ -39,7 +39,7 @@ export default component$(() => {
         updateDatabaseIdAction={updateDatabaseId}
         initialDate={date.value}
       />
-      <main class="flex grow flex-col">
+      <main class="flex grow flex-col overflow-y-hidden">
         <Slot />
       </main>
     </div>

@@ -34,17 +34,17 @@ export const Navbar = component$((props: NavbarProps) => {
             navigate("/app?date=" + date.toISOString().split("T", 1)[0])
           }
         />
-        <Form class="flex gap-1" action={props.updateDatabaseIdAction}>
-          <input
-            type="text"
-            placeholder="Database ID"
-            class="input input-bordered w-24 md:w-auto"
-            name="databaseId"
-          />
-          <button type="submit" class="btn btn-warning">
-            Load
-          </button>
-        </Form>
+        {/*<Form class="flex gap-1" action={props.updateDatabaseIdAction}>*/}
+        {/*  <input*/}
+        {/*    type="text"*/}
+        {/*    placeholder="Database ID"*/}
+        {/*    class="input input-bordered w-24 md:w-auto"*/}
+        {/*    name="databaseId"*/}
+        {/*  />*/}
+        {/*  <button type="submit" class="btn btn-warning">*/}
+        {/*    Load*/}
+        {/*  </button>*/}
+        {/*</Form>*/}
         <div class="dropdown dropdown-end">
           <div
             tabIndex={0}
@@ -54,7 +54,7 @@ export const Navbar = component$((props: NavbarProps) => {
             <div class="w-10 rounded-full">
               <img
                 alt="Avatar for logged in user"
-                src={session.value?.user?.image ?? ""}
+                src={session.value?.user.image ?? ""}
               />
             </div>
           </div>
