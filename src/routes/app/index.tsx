@@ -4,12 +4,18 @@ import {
   useSignal,
   useVisibleTask$,
 } from "@builder.io/qwik";
-import { routeLoader$, useLocation, useNavigate } from "@builder.io/qwik-city";
+import {
+  Form,
+  routeLoader$,
+  useLocation,
+  useNavigate,
+} from "@builder.io/qwik-city";
 import { datePlus } from "itty-time";
 
 import { SettingShowDaysContext } from "~/components/settings-context/setting-show-days-context";
 import { Stats } from "~/components/stats/stats";
 import { getSchedule } from "~/lib/notion";
+import { useRefreshNotionAction } from "~/routes/app/layout";
 import { database } from "~/routes/plugin@01-database";
 
 const DAYS = [
@@ -92,6 +98,7 @@ export default component$(() => {
   const location = useLocation();
   const navigate = useNavigate();
   const schedule = useSchedule();
+  const refreshNotion = useRefreshNotionAction();
   const showDays = useContext(SettingShowDaysContext);
   const teacherFilter = useSignal<string | undefined>(undefined);
   const roomFilter = useSignal<string | undefined>(undefined);
@@ -124,7 +131,24 @@ export default component$(() => {
   });
 
   if (schedule.value === null) {
-    return <h1>no schedule yet</h1>;
+    return (
+      <div class="hero min-h-screen bg-base-200">
+        <div class="hero-content text-center">
+          <div class="max-w-md">
+            <h1 class="text-5xl font-bold">Horario no Inicializado</h1>
+            <p class="py-6">
+              Para actualizar el horario con la base de datos, presiona el botón
+              de abajo o el botón de recarga en la barra de navegación.
+            </p>
+            <Form action={refreshNotion}>
+              <button type="submit" class="btn btn-primary">
+                Cargar!
+              </button>
+            </Form>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -148,6 +172,16 @@ export default component$(() => {
 
       <div class="overflow-auto">
         <table class="table table-zebra table-pin-rows shadow-xl">
+          <colgroup>
+            <col class="w-[20%]" />
+            <col class="w-[10%]" />
+            <col class="w-[10%]" />
+            <col />
+            <col />
+            <col />
+            <col />
+          </colgroup>
+
           <thead>
             <tr>
               <th>Clase</th>
@@ -216,14 +250,18 @@ export default component$(() => {
                   {i.title}
                 </th>
                 <td>
-                  {i.grade.map((grade) => (
-                    <span class="badge">{grade}</span>
-                  ))}
+                  <ul class="flex flex-wrap gap-1">
+                    {i.grade.map((grade) => (
+                      <li class="badge">{grade}</li>
+                    ))}
+                  </ul>
                 </td>
                 <td>
-                  {i.room.map((room) => (
-                    <span class="badge">{room}</span>
-                  ))}
+                  <ul class="flex flex-wrap gap-1">
+                    {i.room.map((room) => (
+                      <li class="badge">{room}</li>
+                    ))}
+                  </ul>
                 </td>
                 {showDays.showDays.value && (
                   <td class="flex gap-1">
@@ -243,9 +281,11 @@ export default component$(() => {
                 <td>{i.start}</td>
                 <td>{i.end}</td>
                 <td>
-                  {i.teacher.map((t) => (
-                    <span class="badge">{t}</span>
-                  ))}
+                  <ul class="flex flex-wrap gap-1">
+                    {i.teacher.map((t) => (
+                      <li class="badge">{t}</li>
+                    ))}
+                  </ul>
                 </td>
                 <td>
                   <button
