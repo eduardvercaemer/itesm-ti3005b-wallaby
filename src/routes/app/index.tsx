@@ -1,5 +1,6 @@
 import { component$, useContext, useSignal } from "@builder.io/qwik";
 import { routeLoader$, useLocation, useNavigate } from "@builder.io/qwik-city";
+import { datePlus } from "itty-time";
 
 import { SettingShowDaysContext } from "~/components/settings-context/setting-show-days-context";
 import { Stats } from "~/components/stats/stats";
@@ -32,7 +33,38 @@ export const useSchedule = routeLoader$(async (e) => {
 
   const { classes, grades, rooms, teachers } = schedule;
 
-  const filteredClasses = classes.filter((_) => true);
+  const dayName = dateString
+    ? DAYS[datePlus("12 hours", new Date(dateString)).getDay()]
+    : null;
+
+  const filteredClasses = classes
+    .filter((c) => {
+      if (!dayName) return true;
+      return c.day.includes(dayName);
+    })
+    .filter((c) => {
+      if (!roomString) return true;
+      return c.room.includes(roomString);
+    })
+    .filter((c) => {
+      if (!gradeString) return true;
+      return c.grade.includes(gradeString);
+    })
+    .filter((c) => {
+      if (!teacherString) return true;
+      return c.teacher.includes(teacherString);
+    })
+    .filter((c) => {
+      if (!startString || !endString) return true;
+      const classStart = parseInt(c.start.replace(":", ""));
+      const classEnd = parseInt(c.end.replace(":", ""));
+      const start = parseInt(startString.replace(":", ""));
+      const end = parseInt(endString.replace(":", ""));
+      return (
+        (classStart >= start && classStart < end) ||
+        (classEnd > start && classEnd <= end)
+      );
+    });
 
   const freeTeachers = teachers.filter(
     (t) => !filteredClasses.some((c) => c.teacher.includes(t)),
@@ -47,7 +79,7 @@ export const useSchedule = routeLoader$(async (e) => {
     freeTeachers,
     start: startString ?? null,
     end: endString ?? null,
-    dayName: "foo",
+    dayName,
   };
 });
 
