@@ -5,8 +5,16 @@ import { Link } from "@builder.io/qwik-city";
 export default component$(() => {
   return (
     <>
-      <h1>index</h1>
-      <Link href="/app">Inicio</Link>
+      <div class="hero min-h-screen bg-base-200">
+        <div class="hero-content text-center">
+          <div class="max-w-md">
+            <h1 class="text-5xl font-bold">Wallaby</h1>
+            <Link href="/app" class="btn btn-primary">
+              Ir a Horarios
+            </Link>
+          </div>
+        </div>
+      </div>
     </>
   );
 });

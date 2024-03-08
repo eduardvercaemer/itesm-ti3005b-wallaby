@@ -4,6 +4,7 @@ import { useNavigate } from "@builder.io/qwik-city";
 import { Form, Link } from "@builder.io/qwik-city";
 
 import { DatepickerInput } from "~/components/datepicker/datepicker";
+import { IcBaselineAccountCircle } from "~/components/icons/baseline-account-circle";
 import { IcOutlineSettings } from "~/components/icons/outline-settings";
 import { IcRoundLogOut } from "~/components/icons/round-log-out";
 import { useAuthSession, useAuthSignout } from "~/routes/plugin@10-auth";
@@ -52,10 +53,16 @@ export const Navbar = component$((props: NavbarProps) => {
             class="avatar btn btn-circle btn-ghost"
           >
             <div class="w-10 rounded-full">
-              <img
-                alt="Avatar for logged in user"
-                src={session.value?.user.image ?? ""}
-              />
+              {session.value?.user.image ? (
+                <img
+                  height={48}
+                  width={48}
+                  alt="Avatar for logged in user"
+                  src={session.value.user.image}
+                />
+              ) : (
+                <IcBaselineAccountCircle class="h-10 w-10" />
+              )}
             </div>
           </div>
           <ul
