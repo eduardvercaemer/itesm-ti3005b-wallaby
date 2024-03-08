@@ -1,4 +1,9 @@
-import { component$, useContext, useSignal } from "@builder.io/qwik";
+import {
+  component$,
+  useContext,
+  useSignal,
+  useVisibleTask$,
+} from "@builder.io/qwik";
 import { routeLoader$, useLocation, useNavigate } from "@builder.io/qwik-city";
 import { datePlus } from "itty-time";
 
@@ -92,6 +97,31 @@ export default component$(() => {
   const roomFilter = useSignal<string | undefined>(undefined);
   const gradeFilter = useSignal<string | undefined>(undefined);
 
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
+    track(() => teacherFilter.value);
+    track(() => roomFilter.value);
+    track(() => gradeFilter.value);
+
+    const url = new URL(location.url);
+    if (teacherFilter.value) {
+      url.searchParams.set("teacher", teacherFilter.value);
+    } else {
+      url.searchParams.delete("teacher");
+    }
+    if (roomFilter.value) {
+      url.searchParams.set("room", roomFilter.value);
+    } else {
+      url.searchParams.delete("room");
+    }
+    if (gradeFilter.value) {
+      url.searchParams.set("grade", gradeFilter.value);
+    } else {
+      url.searchParams.delete("grade");
+    }
+    return navigate(url.href.toString());
+  });
+
   if (schedule.value === null) {
     return <h1>no schedule yet</h1>;
   }
@@ -128,7 +158,7 @@ export default component$(() => {
                     bind:value={gradeFilter}
                     class="select select-bordered select-secondary select-xs w-full max-w-xs"
                   >
-                    <option value="null">---</option>
+                    <option value="">---</option>
 
                     {schedule.value.grades.map((t) => (
                       <option key={t} value={t}>
@@ -146,7 +176,7 @@ export default component$(() => {
                     bind:value={roomFilter}
                     class="select select-bordered select-secondary select-xs w-full max-w-xs"
                   >
-                    <option value="null">---</option>
+                    <option value="">---</option>
 
                     {schedule.value.rooms.map((t) => (
                       <option key={t} value={t}>
@@ -166,7 +196,7 @@ export default component$(() => {
                   bind:value={teacherFilter}
                   class="select select-bordered select-secondary select-xs w-full max-w-xs"
                 >
-                  <option value="null">---</option>
+                  <option value="">---</option>
 
                   {schedule.value.teachers.map((t) => (
                     <option key={t} value={t}>
