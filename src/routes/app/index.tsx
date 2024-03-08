@@ -96,6 +96,7 @@ export default component$(() => {
   const teacherFilter = useSignal<string | undefined>(undefined);
   const roomFilter = useSignal<string | undefined>(undefined);
   const gradeFilter = useSignal<string | undefined>(undefined);
+  const dialog = useSignal<HTMLDialogElement>();
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
@@ -249,12 +250,8 @@ export default component$(() => {
                 <td>
                   <button
                     class="btn btn-outline btn-secondary btn-xs"
-                    disabled={location.isNavigating}
                     onClick$={() => {
-                      const url = new URL(location.url);
-                      url.searchParams.set("start", i.start);
-                      url.searchParams.set("end", i.end);
-                      return navigate(url.href.toString());
+                      dialog.value!.showModal();
                     }}
                   >
                     Suplir
@@ -266,18 +263,22 @@ export default component$(() => {
         </table>
       </div>
 
-      <div class="flex justify-center">
-        <div class="card w-96 bg-neutral text-neutral-content">
-          <div class="card-body items-center text-center">
-            <h2 class="card-title">Maestros Disponibles</h2>
-            <ul class="flex flex-wrap  gap-2">
-              {schedule.value.freeTeachers.map((t) => (
-                <li class="badge badge-primary">{t}</li>
-              ))}
-            </ul>
+      <dialog ref={dialog} id="modal_available_teachers" class="modal">
+        <div class="modal-box">
+          <h3 class="text-lg font-bold">Maestros Disponibles</h3>
+          <ul class="flex flex-wrap gap-2">
+            {schedule.value.freeTeachers.map((t) => (
+              <li class="badge badge-primary">{t}</li>
+            ))}
+          </ul>
+
+          <div class="modal-action">
+            <form method="dialog">
+              <button class="btn">Cerrar</button>
+            </form>
           </div>
         </div>
-      </div>
+      </dialog>
     </div>
   );
 });
