@@ -178,6 +178,7 @@ export default component$(() => {
             <col class="w-[10%]" />
             <col />
             <col />
+            <col class="w-[10%]" />
             <col />
             <col />
           </colgroup>

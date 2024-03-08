@@ -1,5 +1,6 @@
 import { component$ } from "@builder.io/qwik";
 import type { ActionStore } from "@builder.io/qwik-city";
+import { useLocation } from "@builder.io/qwik-city";
 import { useNavigate } from "@builder.io/qwik-city";
 import { Form, Link } from "@builder.io/qwik-city";
 
@@ -20,6 +21,7 @@ export const Navbar = component$((props: NavbarProps) => {
   const session = useAuthSession();
   const signOut = useAuthSignout();
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <div class="navbar bg-primary text-primary-content">
@@ -33,9 +35,11 @@ export const Navbar = component$((props: NavbarProps) => {
           class="input input-bordered w-24 md:w-auto"
           placeholder="Fecha"
           initialDate={props.initialDate}
-          onDate$={(date) =>
-            navigate("/app?date=" + date.toISOString().split("T", 1)[0])
-          }
+          onDate$={(date) => {
+            const url = new URL(location.url);
+            url.searchParams.set("date", date.toISOString().split("T", 1)[0]);
+            return navigate(url.href.toString());
+          }}
         />
 
         <Form
@@ -44,9 +48,10 @@ export const Navbar = component$((props: NavbarProps) => {
           data-tip="Recargar Horarios"
         >
           <button
-            class="btn btn-circle btn-ghost"
+            class="btn btn-accent"
             disabled={props.refreshNotionAction.isRunning}
           >
+            Recargar Horarios
             <IcBaselineRefresh class="h-10 w-10" />
           </button>
         </Form>
@@ -62,7 +67,7 @@ export const Navbar = component$((props: NavbarProps) => {
         {/*    Load*/}
         {/*  </button>*/}
         {/*</Form>*/}
-        <div class="dropdown-end dropdown">
+        <div class="dropdown dropdown-end">
           <div
             tabIndex={0}
             role="button"
