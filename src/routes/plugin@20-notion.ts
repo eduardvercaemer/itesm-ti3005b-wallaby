@@ -2,7 +2,7 @@ import type { Session } from "@auth/core/types";
 import type { RequestEventCommon, RequestHandler } from "@builder.io/qwik-city";
 import { Client } from "@notionhq/client";
 
-import { getUserAccessKey } from "~/lib/common";
+import { getUserAccessKey } from "~/lib/auth";
 import { database } from "~/routes/plugin@01-database";
 
 export const onRequest: RequestHandler = async (e) => {

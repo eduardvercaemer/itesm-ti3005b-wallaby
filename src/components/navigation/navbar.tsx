@@ -5,12 +5,14 @@ import { Form, Link } from "@builder.io/qwik-city";
 
 import { DatepickerInput } from "~/components/datepicker/datepicker";
 import { IcBaselineAccountCircle } from "~/components/icons/baseline-account-circle";
+import { IcBaselineRefresh } from "~/components/icons/baseline-refresh";
 import { IcOutlineSettings } from "~/components/icons/outline-settings";
 import { IcRoundLogOut } from "~/components/icons/round-log-out";
 import { useAuthSession, useAuthSignout } from "~/routes/plugin@10-auth";
 
 export interface NavbarProps {
   updateDatabaseIdAction: ActionStore<any, any, any>;
+  refreshNotionAction: ActionStore<any, any, any>;
   initialDate: Date | null;
 }
 
@@ -35,6 +37,20 @@ export const Navbar = component$((props: NavbarProps) => {
             navigate("/app?date=" + date.toISOString().split("T", 1)[0])
           }
         />
+
+        <Form
+          action={props.refreshNotionAction}
+          class="tooltip tooltip-bottom"
+          data-tip="Recargar Horarios"
+        >
+          <button
+            class="btn btn-circle btn-ghost"
+            disabled={props.refreshNotionAction.isRunning}
+          >
+            <IcBaselineRefresh class="h-10 w-10" />
+          </button>
+        </Form>
+
         {/*<Form class="flex gap-1" action={props.updateDatabaseIdAction}>*/}
         {/*  <input*/}
         {/*    type="text"*/}
@@ -46,7 +62,7 @@ export const Navbar = component$((props: NavbarProps) => {
         {/*    Load*/}
         {/*  </button>*/}
         {/*</Form>*/}
-        <div class="dropdown dropdown-end">
+        <div class="dropdown-end dropdown">
           <div
             tabIndex={0}
             role="button"
