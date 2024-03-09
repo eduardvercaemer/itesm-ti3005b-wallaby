@@ -33,6 +33,8 @@ export const useSchedule = routeLoader$(async (e) => {
   const dateString = e.query.get("date");
   const startString = e.query.get("start");
   const endString = e.query.get("end");
+  const supStartString = e.query.get("supStart");
+  const supEndString = e.query.get("supEnd");
   const roomString = e.query.get("room");
   const gradeString = e.query.get("grade");
   const teacherString = e.query.get("teacher");
@@ -76,9 +78,28 @@ export const useSchedule = routeLoader$(async (e) => {
         (classEnd > start && classEnd <= end)
       );
     });
+  const classesSameTimeAsSupClass = classes
+    .filter((c) => {
+      if (!dayName) return true;
+      return c.day.includes(dayName);
+    })
+    .filter((c) => {
+      if (!supStartString || !supEndString) return true;
+      const classStart = parseInt(c.start.replace(":", ""));
+      const classEnd = parseInt(c.end.replace(":", ""));
+      const start = parseInt(supStartString.replace(":", ""));
+      const end = parseInt(supEndString.replace(":", ""));
+      return (
+        (classStart >= start && classStart < end) ||
+        (classEnd > start && classEnd <= end)
+      );
+    });
 
   const freeTeachers = teachers.filter(
     (t) => !filteredClasses.some((c) => c.teacher.includes(t)),
+  );
+  const possibleSupTeachers = teachers.filter(
+    (t) => !classesSameTimeAsSupClass.some((c) => c.teacher.includes(t)),
   );
 
   return {
@@ -88,6 +109,8 @@ export const useSchedule = routeLoader$(async (e) => {
     classes,
     filteredClasses,
     freeTeachers,
+    possibleSupTeachers,
+    supping: supStartString && supEndString,
     start: startString ?? null,
     end: endString ?? null,
     dayName,
@@ -100,11 +123,21 @@ export default component$(() => {
   const schedule = useSchedule();
   const refreshNotion = useRefreshNotionAction();
   const showDays = useContext(SettingShowDaysContext);
-  const teacherFilter = useSignal<string | undefined>(undefined);
-  const roomFilter = useSignal<string | undefined>(undefined);
-  const gradeFilter = useSignal<string | undefined>(undefined);
-  const startFilter = useSignal<string | undefined>(undefined);
-  const endFilter = useSignal<string | undefined>(undefined);
+  const teacherFilter = useSignal<string | undefined>(
+    location.url.searchParams.get("teacher") ?? undefined,
+  );
+  const roomFilter = useSignal<string | undefined>(
+    location.url.searchParams.get("room") ?? undefined,
+  );
+  const gradeFilter = useSignal<string | undefined>(
+    location.url.searchParams.get("grade") ?? undefined,
+  );
+  const startFilter = useSignal<string | undefined>(
+    location.url.searchParams.get("start") ?? undefined,
+  );
+  const endFilter = useSignal<string | undefined>(
+    location.url.searchParams.get("end") ?? undefined,
+  );
   const dialog = useSignal<HTMLDialogElement>();
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -142,6 +175,16 @@ export default component$(() => {
       url.searchParams.delete("end");
     }
     return navigate(url.href.toString());
+  });
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
+    track(() => location.url);
+    if (location.url.searchParams.get("supStart")) {
+      dialog.value?.showModal();
+    } else {
+      dialog.value?.close();
+    }
   });
 
   if (schedule.value === null) {
@@ -183,7 +226,7 @@ export default component$(() => {
           }}
         />
       </div>
-
+      start
       <div class="overflow-auto">
         <table class="table table-zebra table-pin-rows shadow-xl">
           <colgroup>
@@ -324,7 +367,10 @@ export default component$(() => {
                   <button
                     class="btn btn-outline btn-secondary btn-xs"
                     onClick$={() => {
-                      dialog.value!.showModal();
+                      const url = new URL(location.url);
+                      url.searchParams.set("supStart", i.start);
+                      url.searchParams.set("supEnd", i.end);
+                      return navigate(url.href.toString());
                     }}
                   >
                     Suplir
@@ -335,12 +381,21 @@ export default component$(() => {
           </tbody>
         </table>
       </div>
-
-      <dialog ref={dialog} id="modal_available_teachers" class="modal">
+      <dialog
+        ref={dialog}
+        id="modal_available_teachers"
+        class="modal"
+        onClose$={() => {
+          const url = new URL(location.url);
+          url.searchParams.delete("supStart");
+          url.searchParams.delete("supEnd");
+          return navigate(url.href.toString());
+        }}
+      >
         <div class="modal-box">
           <h3 class="text-lg font-bold">Maestros Disponibles</h3>
           <ul class="flex flex-wrap gap-2">
-            {schedule.value.freeTeachers.map((t) => (
+            {schedule.value.possibleSupTeachers.map((t) => (
               <li class="badge badge-primary">{t}</li>
             ))}
           </ul>
