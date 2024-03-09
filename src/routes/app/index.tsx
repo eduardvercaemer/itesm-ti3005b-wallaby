@@ -326,18 +326,10 @@ export default component$(() => {
                   {i.title}
                 </th>
                 <td>
-                  <ul class="flex flex-wrap gap-1">
-                    {i.grade.map((grade) => (
-                      <li class="badge">{grade}</li>
-                    ))}
-                  </ul>
+                  <Badges badges={i.grade} />
                 </td>
                 <td>
-                  <ul class="flex flex-wrap gap-1">
-                    {i.room.map((room) => (
-                      <li class="badge">{room}</li>
-                    ))}
-                  </ul>
+                  <Badges badges={i.room} />
                 </td>
                 {showDays.showDays.value && (
                   <td class="flex gap-1">
@@ -357,11 +349,7 @@ export default component$(() => {
                 <td>{i.start}</td>
                 <td>{i.end}</td>
                 <td>
-                  <ul class="flex flex-wrap gap-1">
-                    {i.teacher.map((t) => (
-                      <li class="badge">{t}</li>
-                    ))}
-                  </ul>
+                  <Badges badges={i.teacher} />
                 </td>
                 <td>
                   <button
@@ -392,13 +380,9 @@ export default component$(() => {
           return navigate(url.href.toString());
         }}
       >
-        <div class="modal-box">
+        <div class="modal-box flex flex-col gap-4">
           <h3 class="text-lg font-bold">Maestros Disponibles</h3>
-          <ul class="flex flex-wrap gap-2">
-            {schedule.value.possibleSupTeachers.map((t) => (
-              <li class="badge badge-primary">{t}</li>
-            ))}
-          </ul>
+          <Badges badges={schedule.value.possibleSupTeachers} primary long />
 
           <div class="modal-action">
             <form method="dialog">
@@ -410,3 +394,25 @@ export default component$(() => {
     </div>
   );
 });
+
+function Badges(props: {
+  badges: string[];
+  primary?: boolean;
+  long?: boolean;
+}) {
+  return (
+    <ul class={["flex flex-wrap", props.long ? "gap-4" : "gap-1"]}>
+      {props.badges.map((t) => (
+        <li
+          key={t}
+          class={[
+            "badge flex items-center py-3",
+            props.primary ? "badge-primary" : "",
+          ]}
+        >
+          <span>{t}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
