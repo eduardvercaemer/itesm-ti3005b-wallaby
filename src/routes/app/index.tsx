@@ -103,6 +103,8 @@ export default component$(() => {
   const teacherFilter = useSignal<string | undefined>(undefined);
   const roomFilter = useSignal<string | undefined>(undefined);
   const gradeFilter = useSignal<string | undefined>(undefined);
+  const startFilter = useSignal<string | undefined>(undefined);
+  const endFilter = useSignal<string | undefined>(undefined);
   const dialog = useSignal<HTMLDialogElement>();
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -110,6 +112,8 @@ export default component$(() => {
     track(() => teacherFilter.value);
     track(() => roomFilter.value);
     track(() => gradeFilter.value);
+    track(() => startFilter.value);
+    track(() => endFilter.value);
 
     const url = new URL(location.url);
     if (teacherFilter.value) {
@@ -126,6 +130,16 @@ export default component$(() => {
       url.searchParams.set("grade", gradeFilter.value);
     } else {
       url.searchParams.delete("grade");
+    }
+    if (startFilter.value) {
+      url.searchParams.set("start", startFilter.value);
+    } else {
+      url.searchParams.delete("start");
+    }
+    if (endFilter.value) {
+      url.searchParams.set("end", endFilter.value);
+    } else {
+      url.searchParams.delete("end");
     }
     return navigate(url.href.toString());
   });
@@ -223,8 +237,26 @@ export default component$(() => {
                 </div>
               </th>
               {showDays.showDays.value && <th>Días</th>}
-              <th>Inicio</th>
-              <th>Fin</th>
+              <th>
+                <div class="flex flex-col items-center gap-1">
+                  <span>Inicio</span>
+                  <input
+                    type="time"
+                    bind:value={startFilter}
+                    class="input input-xs input-bordered input-secondary w-full max-w-xs"
+                  />
+                </div>
+              </th>
+              <th>
+                <div class="flex flex-col items-center gap-1">
+                  <span>Fin</span>
+                  <input
+                    type="time"
+                    bind:value={endFilter}
+                    class="input input-xs input-bordered input-secondary w-full max-w-xs"
+                  />
+                </div>
+              </th>
               <th class="flex flex-col items-center gap-1">
                 <span>Maestro</span>
 
