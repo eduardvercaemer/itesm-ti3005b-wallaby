@@ -23,7 +23,7 @@ export const Stats = component$((props: StatsProps) => {
         <div class="stat-figure text-secondary">
           <IcBaselineCollectionsBookmark class="inline-block h-8 w-8 stroke-current" />
         </div>
-        <div class="stat-title">Bloques de Clase</div>
+        <div class="stat-title">Clases</div>
         <div class="stat-value">{props.blockCount}</div>
         <div class="stat-desc">/ {props.totalBlockCount}</div>
       </div>
@@ -41,7 +41,7 @@ export const Stats = component$((props: StatsProps) => {
           <div class="stat-figure text-secondary">
             <IcBaselineAlarmAdd class="inline-block h-8 w-8 stroke-current" />
           </div>
-          <div class="stat-title">Supliendo Horario</div>
+          <div class="stat-title">Horario</div>
           <div class="stat-value">
             {props.supStart} - {props.supEnd}
           </div>

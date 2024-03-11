@@ -226,7 +226,6 @@ export default component$(() => {
           }}
         />
       </div>
-      start
       <div class="overflow-auto">
         <table class="table table-zebra table-pin-rows shadow-xl">
           <colgroup>
