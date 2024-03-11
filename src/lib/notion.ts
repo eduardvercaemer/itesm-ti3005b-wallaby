@@ -156,7 +156,7 @@ export async function fetchFullScheduleFromNotion(
 
 export async function getSchedule(db: D1Database) {
   const schedule = await getSchedule_(db);
-  console.debug("SCHEDULE", schedule);
+  // console.debug("SCHEDULE", schedule);
   return schedule
     ? await scheduleSchema.parseAsync(JSON.parse(schedule))
     : null;
