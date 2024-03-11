@@ -90,9 +90,9 @@ export const Navbar = component$((props: NavbarProps) => {
             tabIndex={0}
             class="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
           >
-            <li>
-              <Link href="/app/scheduler">Horarios</Link>
-            </li>
+            {/*<li>*/}
+            {/*  <Link href="/app/scheduler">Horarios</Link>*/}
+            {/*</li>*/}
             <li>
               <Link href="/app/settings" class="flex justify-between">
                 <span>Ajustes</span>
