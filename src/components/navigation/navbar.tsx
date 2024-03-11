@@ -37,6 +37,7 @@ export const Navbar = component$((props: NavbarProps) => {
           initialDate={props.initialDate}
           onDate$={(date) => {
             const url = new URL(location.url);
+            url.pathname = "/app";
             url.searchParams.set("date", date.toISOString().split("T", 1)[0]);
             return navigate(url.href.toString());
           }}

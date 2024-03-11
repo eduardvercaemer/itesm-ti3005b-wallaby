@@ -209,7 +209,7 @@ export default component$(() => {
   }
 
   return (
-    <div class="m-2 flex grow flex-col gap-4 overflow-y-hidden">
+    <div class="m-2 flex grow flex-col items-center gap-4 overflow-auto">
       <div class="flex justify-around px-8">
         <Stats
           freeTeacherCount={schedule.value.freeTeachers.length}
@@ -226,114 +226,125 @@ export default component$(() => {
           }}
         />
       </div>
-      <div class="overflow-auto">
-        <table class="table table-zebra table-pin-rows shadow-xl">
-          <colgroup>
-            <col class="w-[20%]" />
-            <col class="w-[10%]" />
-            <col class="w-[10%]" />
-            <col />
-            <col />
-            <col class="w-[10%]" />
-            <col />
-            <col />
-          </colgroup>
 
-          <thead>
-            <tr>
-              <th>Clase</th>
-              <th>
-                <div class="flex flex-col items-center gap-1">
-                  <span>Grado</span>
+      <table class="table table-pin-rows mx-auto border-separate border-spacing-y-4 shadow-xl">
+        <colgroup>
+          {/*clase*/}
+          <col class={[showDays.showDays.value ? "w-[10%]" : "w-[20%]"]} />
+          {/*dias*/}
+          {showDays.showDays.value && (
+            <col class={[showDays.showDays.value ? "w-[35%]" : "w-[0%]"]} />
+          )}
+          {/*grado*/}
+          <col class={[showDays.showDays.value ? "w-[7.5%]" : "w-[10%]"]} />
+          {/*salon*/}
+          <col class={[showDays.showDays.value ? "w-[7.5%]" : "w-[10%]"]} />
+          {/*inicio*/}
+          <col class={[showDays.showDays.value ? "w-[7.5%]" : "w-[10%]"]} />
+          {/*fin*/}
+          <col class={[showDays.showDays.value ? "w-[7.5%]" : "w-[10%]"]} />
+          {/*maestro*/}
+          <col class={[showDays.showDays.value ? "w-[10%]" : "w-[10%]"]} />
+          {/*boton*/}
+          <col class={[showDays.showDays.value ? "w-[7.5%]" : "w-[10%]"]} />
+        </colgroup>
 
-                  <select
-                    bind:value={gradeFilter}
-                    class="select select-bordered select-secondary select-xs w-full max-w-xs"
-                  >
-                    <option value="">---</option>
-
-                    {schedule.value.grades.map((t) => (
-                      <option key={t} value={t}>
-                        {t}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </th>
-              <th>
-                <div class="flex flex-col items-center gap-1">
-                  <span>Salón</span>
-
-                  <select
-                    bind:value={roomFilter}
-                    class="select select-bordered select-secondary select-xs w-full max-w-xs"
-                  >
-                    <option value="">---</option>
-
-                    {schedule.value.rooms.map((t) => (
-                      <option key={t} value={t}>
-                        {t}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </th>
-              {showDays.showDays.value && <th>Días</th>}
-              <th>
-                <div class="flex flex-col items-center gap-1">
-                  <span>Inicio</span>
-                  <input
-                    type="time"
-                    bind:value={startFilter}
-                    class="input input-xs input-bordered input-secondary w-full max-w-xs"
-                  />
-                </div>
-              </th>
-              <th>
-                <div class="flex flex-col items-center gap-1">
-                  <span>Fin</span>
-                  <input
-                    type="time"
-                    bind:value={endFilter}
-                    class="input input-xs input-bordered input-secondary w-full max-w-xs"
-                  />
-                </div>
-              </th>
-              <th class="flex flex-col items-center gap-1">
-                <span>Maestro</span>
+        <thead>
+          <tr>
+            <th>Clase</th>
+            {showDays.showDays.value && <th>Días</th>}
+            <th>
+              <div class="flex flex-col items-center gap-1">
+                <span>Grado</span>
 
                 <select
-                  bind:value={teacherFilter}
+                  bind:value={gradeFilter}
                   class="select select-bordered select-secondary select-xs w-full max-w-xs"
                 >
                   <option value="">---</option>
 
-                  {schedule.value.teachers.map((t) => (
+                  {schedule.value.grades.map((t) => (
                     <option key={t} value={t}>
                       {t}
                     </option>
                   ))}
                 </select>
+              </div>
+            </th>
+            <th>
+              <div class="flex flex-col items-center gap-1">
+                <span>Salón</span>
+
+                <select
+                  bind:value={roomFilter}
+                  class="select select-bordered select-secondary select-xs w-full max-w-xs"
+                >
+                  <option value="">---</option>
+
+                  {schedule.value.rooms.map((t) => (
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </th>
+            <th>
+              <div class="flex flex-col items-center gap-1">
+                <span>Inicio</span>
+                <input
+                  type="time"
+                  bind:value={startFilter}
+                  class="input input-xs input-bordered input-secondary w-full max-w-xs"
+                />
+              </div>
+            </th>
+            <th>
+              <div class="flex flex-col items-center gap-1">
+                <span>Fin</span>
+                <input
+                  type="time"
+                  bind:value={endFilter}
+                  class="input input-xs input-bordered input-secondary w-full max-w-xs"
+                />
+              </div>
+            </th>
+            <th class="flex flex-col items-center gap-1">
+              <span>Maestro</span>
+
+              <select
+                bind:value={teacherFilter}
+                class="select select-bordered select-secondary select-xs w-full max-w-xs"
+              >
+                <option value="">---</option>
+
+                {schedule.value.teachers.map((t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
+              </select>
+            </th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {schedule.value.filteredClasses.map((i, index) => (
+            <tr key={i.id}>
+              <th
+                role="row"
+                class={[
+                  "rounded-l-xl font-bold",
+                  index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2",
+                ]}
+              >
+                {i.title}
               </th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {schedule.value.filteredClasses.map((i) => (
-              <tr key={i.id}>
-                <th role="row" class="font-bold">
-                  {i.title}
-                </th>
-                <td>
-                  <Badges badges={i.grade} />
-                </td>
-                <td>
-                  <Badges badges={i.room} />
-                </td>
-                {showDays.showDays.value && (
-                  <td class="flex gap-1">
+              {showDays.showDays.value && (
+                <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
+                  <ul class="flex flex-wrap gap-1">
                     {DAYS.map((d) => (
-                      <span
+                      <li
                         class={[
                           "badge",
                           d === schedule.value.dayName ? "badge-primary" : "",
@@ -341,33 +352,49 @@ export default component$(() => {
                         ]}
                       >
                         {d}
-                      </span>
+                      </li>
                     ))}
-                  </td>
-                )}
-                <td>{i.start}</td>
-                <td>{i.end}</td>
-                <td>
-                  <Badges badges={i.teacher} />
+                  </ul>
                 </td>
-                <td>
-                  <button
-                    class="btn btn-outline btn-secondary btn-xs"
-                    onClick$={() => {
-                      const url = new URL(location.url);
-                      url.searchParams.set("supStart", i.start);
-                      url.searchParams.set("supEnd", i.end);
-                      return navigate(url.href.toString());
-                    }}
-                  >
-                    Suplir
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+              )}
+              <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
+                <Badges badges={i.grade} />
+              </td>
+              <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
+                <Badges badges={i.room} />
+              </td>
+              <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
+                {i.start}
+              </td>
+              <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
+                {i.end}
+              </td>
+              <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
+                <Badges badges={i.teacher} />
+              </td>
+              <td
+                class={[
+                  "rounded-r-xl",
+                  index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2",
+                ]}
+              >
+                <button
+                  class="btn btn-primary btn-sm"
+                  onClick$={() => {
+                    const url = new URL(location.url);
+                    url.searchParams.set("supStart", i.start);
+                    url.searchParams.set("supEnd", i.end);
+                    return navigate(url.href.toString());
+                  }}
+                >
+                  Suplir
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
       <dialog
         ref={dialog}
         id="modal_available_teachers"

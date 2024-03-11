@@ -28,7 +28,7 @@ export default function (opts: RenderToStreamOptions) {
     // Use container attributes to set attributes on the html tag.
     containerAttributes: {
       lang: "en-us",
-      "date-theme": "emerald",
+      "date-theme": "wallaby",
       ...opts.containerAttributes,
     },
   });
