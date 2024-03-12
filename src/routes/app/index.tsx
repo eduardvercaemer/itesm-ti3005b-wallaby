@@ -432,7 +432,7 @@ function Badges(props: {
         <li
           key={t}
           class={[
-            "badge flex items-center py-3",
+            "badge flex items-center justify-center py-3",
             props.primary ? "badge-primary" : "",
           ]}
         >
