@@ -7,7 +7,6 @@ import { Form, Link } from "@builder.io/qwik-city";
 import { DatepickerInput } from "~/components/datepicker/datepicker";
 import { IcBaselineAccountCircle } from "~/components/icons/baseline-account-circle";
 import { IcBaselineRefresh } from "~/components/icons/baseline-refresh";
-import { IcOutlineSettings } from "~/components/icons/outline-settings";
 import { IcRoundLogOut } from "~/components/icons/round-log-out";
 import { useAuthSession, useAuthSignout } from "~/routes/plugin@10-auth";
 
@@ -32,7 +31,6 @@ export const Navbar = component$((props: NavbarProps) => {
       </div>
       <div class="flex-none gap-2">
         <DatepickerInput
-          class="input input-bordered w-24 md:w-auto"
           placeholder="Fecha"
           initialDate={props.initialDate}
           onDate$={(date) => {
@@ -49,11 +47,11 @@ export const Navbar = component$((props: NavbarProps) => {
           data-tip="Recargar Horarios"
         >
           <button
-            class="btn btn-accent"
+            class="btn btn-accent btn-sm"
             disabled={props.refreshNotionAction.isRunning}
           >
             Recargar Horarios
-            <IcBaselineRefresh class="h-10 w-10" />
+            <IcBaselineRefresh class="h-6 w-6" />
           </button>
         </Form>
 
@@ -94,12 +92,12 @@ export const Navbar = component$((props: NavbarProps) => {
             {/*<li>*/}
             {/*  <Link href="/app/scheduler">Horarios</Link>*/}
             {/*</li>*/}
-            <li>
-              <Link href="/app/settings" class="flex justify-between">
-                <span>Ajustes</span>
-                <IcOutlineSettings />
-              </Link>
-            </li>
+            {/*<li>*/}
+            {/*  <Link href="/app/settings" class="flex justify-between">*/}
+            {/*    <span>Ajustes</span>*/}
+            {/*    <IcOutlineSettings />*/}
+            {/*  </Link>*/}
+            {/*</li>*/}
             <li>
               <Form action={signOut} class="flex justify-between text-error">
                 <input type="hidden" name="callbackUrl" value="/" />
