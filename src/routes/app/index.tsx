@@ -354,6 +354,7 @@ export default component$(() => {
                     <ul class="flex flex-wrap gap-1">
                       {DAYS.map((d) => (
                         <li
+                          key={d}
                           class={[
                             "badge",
                             d === schedule.value.dayName ? "badge-primary" : "",
@@ -372,10 +373,20 @@ export default component$(() => {
                 <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
                   <Badges badges={i.room} />
                 </td>
-                <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
+                <td
+                  class={[
+                    "text-center",
+                    index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2",
+                  ]}
+                >
                   {i.start}
                 </td>
-                <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
+                <td
+                  class={[
+                    "text-center",
+                    index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2",
+                  ]}
+                >
                   {i.end}
                 </td>
                 <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
@@ -387,17 +398,19 @@ export default component$(() => {
                     index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2",
                   ]}
                 >
-                  <button
-                    class="btn btn-primary btn-sm"
-                    onClick$={() => {
-                      const url = new URL(location.url);
-                      url.searchParams.set("supStart", i.start);
-                      url.searchParams.set("supEnd", i.end);
-                      return navigate(url.href.toString());
-                    }}
-                  >
-                    Suplir
-                  </button>
+                  <div class="flex flex-wrap justify-center">
+                    <button
+                      class="btn btn-primary btn-sm"
+                      onClick$={() => {
+                        const url = new URL(location.url);
+                        url.searchParams.set("supStart", i.start);
+                        url.searchParams.set("supEnd", i.end);
+                        return navigate(url.href.toString());
+                      }}
+                    >
+                      Suplir
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -438,12 +451,14 @@ function Badges(props: {
   long?: boolean;
 }) {
   return (
-    <ul class={["flex flex-wrap", props.long ? "gap-4" : "gap-1"]}>
+    <ul
+      class={["flex flex-wrap  justify-center", props.long ? "gap-4" : "gap-1"]}
+    >
       {props.badges.map((t) => (
         <li
           key={t}
           class={[
-            "badge flex items-center justify-center py-3",
+            "badge flex items-center py-3",
             props.primary ? "badge-primary" : "",
           ]}
         >
