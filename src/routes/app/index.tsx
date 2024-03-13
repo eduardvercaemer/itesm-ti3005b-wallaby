@@ -12,6 +12,7 @@ import {
 } from "@builder.io/qwik-city";
 import { datePlus } from "itty-time";
 
+import { LoadingScreen } from "~/components/loading/loading-screen";
 import { SettingShowDaysContext } from "~/components/settings-context/setting-show-days-context";
 import { Stats } from "~/components/stats/stats";
 import { getSchedule } from "~/lib/notion";
@@ -259,6 +260,7 @@ export default component$(() => {
 
                 <select
                   bind:value={gradeFilter}
+                  disabled={location.isNavigating}
                   class="select select-bordered select-secondary select-xs w-full max-w-xs"
                 >
                   <option value="">---</option>
@@ -277,6 +279,7 @@ export default component$(() => {
 
                 <select
                   bind:value={roomFilter}
+                  disabled={location.isNavigating}
                   class="select select-bordered select-secondary select-xs w-full max-w-xs"
                 >
                   <option value="">---</option>
@@ -295,6 +298,7 @@ export default component$(() => {
                 <input
                   type="time"
                   bind:value={startFilter}
+                  disabled={location.isNavigating}
                   class="input input-xs input-bordered input-secondary w-full max-w-xs"
                 />
               </div>
@@ -305,6 +309,7 @@ export default component$(() => {
                 <input
                   type="time"
                   bind:value={endFilter}
+                  disabled={location.isNavigating}
                   class="input input-xs input-bordered input-secondary w-full max-w-xs"
                 />
               </div>
@@ -314,6 +319,7 @@ export default component$(() => {
 
               <select
                 bind:value={teacherFilter}
+                disabled={location.isNavigating}
                 class="select select-bordered select-secondary select-xs w-full max-w-xs"
               >
                 <option value="">---</option>
@@ -329,71 +335,76 @@ export default component$(() => {
           </tr>
         </thead>
         <tbody>
-          {schedule.value.filteredClasses.map((i, index) => (
-            <tr key={i.id}>
-              <th
-                role="row"
-                class={[
-                  "rounded-l-xl font-bold",
-                  index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2",
-                ]}
-              >
-                {i.title}
-              </th>
-              {showDays.showDays.value && (
-                <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
-                  <ul class="flex flex-wrap gap-1">
-                    {DAYS.map((d) => (
-                      <li
-                        class={[
-                          "badge",
-                          d === schedule.value.dayName ? "badge-primary" : "",
-                          i.day.includes(d) ? "" : "opacity-20",
-                        ]}
-                      >
-                        {d}
-                      </li>
-                    ))}
-                  </ul>
-                </td>
-              )}
-              <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
-                <Badges badges={i.grade} />
-              </td>
-              <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
-                <Badges badges={i.room} />
-              </td>
-              <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
-                {i.start}
-              </td>
-              <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
-                {i.end}
-              </td>
-              <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
-                <Badges badges={i.teacher} />
-              </td>
-              <td
-                class={[
-                  "rounded-r-xl",
-                  index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2",
-                ]}
-              >
-                <button
-                  class="btn btn-primary btn-sm"
-                  onClick$={() => {
-                    const url = new URL(location.url);
-                    url.searchParams.set("supStart", i.start);
-                    url.searchParams.set("supEnd", i.end);
-                    return navigate(url.href.toString());
-                  }}
+          {!location.isNavigating &&
+            schedule.value.filteredClasses.map((i, index) => (
+              <tr key={i.id}>
+                <th
+                  role="row"
+                  class={[
+                    "rounded-l-xl font-bold",
+                    index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2",
+                  ]}
                 >
-                  Suplir
-                </button>
-              </td>
-            </tr>
-          ))}
+                  {i.title}
+                </th>
+                {showDays.showDays.value && (
+                  <td
+                    class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}
+                  >
+                    <ul class="flex flex-wrap gap-1">
+                      {DAYS.map((d) => (
+                        <li
+                          class={[
+                            "badge",
+                            d === schedule.value.dayName ? "badge-primary" : "",
+                            i.day.includes(d) ? "" : "opacity-20",
+                          ]}
+                        >
+                          {d}
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
+                )}
+                <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
+                  <Badges badges={i.grade} />
+                </td>
+                <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
+                  <Badges badges={i.room} />
+                </td>
+                <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
+                  {i.start}
+                </td>
+                <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
+                  {i.end}
+                </td>
+                <td class={[index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2"]}>
+                  <Badges badges={i.teacher} />
+                </td>
+                <td
+                  class={[
+                    "rounded-r-xl",
+                    index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2",
+                  ]}
+                >
+                  <button
+                    class="btn btn-primary btn-sm"
+                    onClick$={() => {
+                      const url = new URL(location.url);
+                      url.searchParams.set("supStart", i.start);
+                      url.searchParams.set("supEnd", i.end);
+                      return navigate(url.href.toString());
+                    }}
+                  >
+                    Suplir
+                  </button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
+
+      {location.isNavigating && <LoadingScreen />}
 
       <dialog
         ref={dialog}
