@@ -210,7 +210,7 @@ export default component$(() => {
   }
 
   return (
-    <div class="m-2 flex grow flex-col items-center gap-4 overflow-auto">
+    <div class="m-2 flex grow flex-col items-center gap-4 overflow-auto lg:mx-32">
       <div class="flex justify-around px-8">
         <Stats
           freeTeacherCount={schedule.value.freeTeachers.length}
@@ -228,7 +228,7 @@ export default component$(() => {
         />
       </div>
 
-      <table class="table table-pin-rows mx-auto border-separate border-spacing-y-4 shadow-xl">
+      <table class="table table-pin-rows border-separate border-spacing-y-4 shadow-xl">
         <colgroup>
           {/*clase*/}
           <col class={[showDays.showDays.value ? "w-[10%]" : "w-[20%]"]} />
