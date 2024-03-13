@@ -252,11 +252,13 @@ export default component$(() => {
 
         <thead>
           <tr>
-            <th>Clase</th>
-            {showDays.showDays.value && <th>Días</th>}
+            <th class="pb-[38px] text-center text-xl font-bold">Clase</th>
+            {showDays.showDays.value && (
+              <th class="pb-[38px] text-center text-xl font-bold">Días</th>
+            )}
             <th>
               <div class="flex flex-col items-center gap-1">
-                <span>Grado</span>
+                <span class="text-xl font-bold">Grado</span>
 
                 <select
                   bind:value={gradeFilter}
@@ -275,7 +277,7 @@ export default component$(() => {
             </th>
             <th>
               <div class="flex flex-col items-center gap-1">
-                <span>Salón</span>
+                <span class="text-xl font-bold">Salón</span>
 
                 <select
                   bind:value={roomFilter}
@@ -294,7 +296,7 @@ export default component$(() => {
             </th>
             <th>
               <div class="flex flex-col items-center gap-1">
-                <span>Inicio</span>
+                <span class="text-xl font-bold">Inicio</span>
                 <input
                   type="time"
                   bind:value={startFilter}
@@ -305,7 +307,7 @@ export default component$(() => {
             </th>
             <th>
               <div class="flex flex-col items-center gap-1">
-                <span>Fin</span>
+                <span class="text-xl font-bold">Fin</span>
                 <input
                   type="time"
                   bind:value={endFilter}
@@ -315,7 +317,7 @@ export default component$(() => {
               </div>
             </th>
             <th class="flex flex-col items-center gap-1">
-              <span>Maestro</span>
+              <span class="text-xl font-bold">Maestro</span>
 
               <select
                 bind:value={teacherFilter}
