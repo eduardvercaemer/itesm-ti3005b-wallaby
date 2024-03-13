@@ -23,7 +23,9 @@ export const Stats = component$((props: StatsProps) => {
         <div class="stat-figure text-secondary">
           <WallabyIcon1 class="inline-block h-10 w-10 stroke-current" />
         </div>
-        <div class="stat-title">Clases en Pantalla</div>
+        <div class="text-wallaby-3 stat-title text-lg font-bold">
+          Clases en Pantalla
+        </div>
         <div class="stat-value">{props.blockCount}</div>
         <div class="stat-desc">/ {props.totalBlockCount}</div>
       </div>
@@ -31,7 +33,9 @@ export const Stats = component$((props: StatsProps) => {
         <div class="stat-figure text-secondary">
           <WallabyIcon2 class="inline-block h-10 w-10 stroke-current" />
         </div>
-        <div class="stat-title">Maestros Libres</div>
+        <div class="text-wallaby-3 stat-title text-lg font-bold">
+          Maestros Disponibles
+        </div>
         <div class="stat-value">{props.freeTeacherCount}</div>
         <div class="stat-desc">/ {props.totalTeacherCount}</div>
       </div>
