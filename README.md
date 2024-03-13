@@ -3,7 +3,7 @@
 1. Loading screen [DONE]
    1. Basic spinner in center of screen
 2. Icons in stat blocks [DONE]
-3. Sign in / Sign out issues
+3. Sign in / Sign out issues [DONE]
 4. Center badges in column [DONE]
 5. Bigger side margins on table [DONE]
 6. Larger text on column headers [DONE]
