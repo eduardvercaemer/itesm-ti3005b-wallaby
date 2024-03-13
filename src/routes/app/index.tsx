@@ -469,10 +469,7 @@ function Badges(props: {
       {props.badges.map((t) => (
         <li
           key={t}
-          class={[
-            "text-wallaby-3 badge flex items-center py-3 font-bold",
-            props.primary ? "badge-primary" : "",
-          ]}
+          class={["badge flex items-center py-3 font-bold text-wallaby-3"]}
         >
           <span>{t}</span>
         </li>
