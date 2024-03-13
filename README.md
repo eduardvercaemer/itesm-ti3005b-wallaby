@@ -2,7 +2,7 @@
 
 1. Loading screen [DONE]
    1. Basic spinner in center of screen
-2. Icons
+2. Icons in stat blocks [DONE]
 3. Sign in / Sign out issues
 4. Center badges in column [DONE]
 5. Bigger side margins on table [DONE]
@@ -11,7 +11,7 @@
 8. Smaller buttons on navbar [DONE]
 9. Wallaby icon on navbar branding
 10. Yellow bg on branding button
-11. Blue color on badges text
+11. Blue color on badges text [DONE]
 12. Test less white background
 13. Align table headers and filters [DONE]
 14. Add header to buttons column, with description [DONE]
