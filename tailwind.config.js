@@ -6,6 +6,7 @@ export default {
     colors: {
       "wallaby-1": "#74a3ff",
       "wallaby-2": "#bcf3ff",
+      "wallaby-3": "#1a489a",
     },
   },
   plugins: [require("daisyui")],

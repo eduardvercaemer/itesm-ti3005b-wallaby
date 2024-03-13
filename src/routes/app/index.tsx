@@ -470,7 +470,7 @@ function Badges(props: {
         <li
           key={t}
           class={[
-            "badge flex items-center py-3",
+            "text-wallaby-3 badge flex items-center py-3 font-bold",
             props.primary ? "badge-primary" : "",
           ]}
         >
