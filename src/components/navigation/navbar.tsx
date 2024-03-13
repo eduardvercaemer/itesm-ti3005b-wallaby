@@ -99,10 +99,15 @@ export const Navbar = component$((props: NavbarProps) => {
             {/*  </Link>*/}
             {/*</li>*/}
             <li>
-              <Form action={signOut} class="flex justify-between text-error">
+              <Form action={signOut} class="flex">
                 <input type="hidden" name="callbackUrl" value="/" />
-                <button type="submit">Cerrar Sesión</button>
-                <IcRoundLogOut />
+                <button
+                  type="submit"
+                  class="flex grow justify-between text-error"
+                >
+                  <span>Cerrar Sesión</span>
+                  <IcRoundLogOut />
+                </button>
               </Form>
             </li>
           </ul>
