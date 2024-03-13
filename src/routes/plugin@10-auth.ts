@@ -1,39 +1,33 @@
 import type { Provider } from "@auth/core/providers";
 import NotionProvider from "@auth/core/providers/notion";
-import { D1Adapter } from "@auth/d1-adapter";
+// import { D1Adapter } from "@auth/d1-adapter";
 import { serverAuth$ } from "@builder.io/qwik-auth";
 
-import { database } from "~/routes/plugin@01-database";
+// import { database } from "~/routes/plugin@01-database";
 
 declare module "@auth/core/types" {
   interface Session {
-    user: {
-      id: string;
-      name: string | null;
-      email: string;
-      image: string | null;
-    };
+    accessToken?: string;
   }
 }
 
 export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
   serverAuth$((e) => {
-    const db = database(e);
+    // const db = database(e);
     return {
       secret: e.env.get("AUTH_SECRET"),
       trustHost: true,
-      adapter: <any>D1Adapter(db),
+      // adapter: <any>D1Adapter(db),
       callbacks: {
-        session({ session, user }) {
-          return {
-            user: {
-              id: user.id,
-              name: user.name ?? null,
-              email: user.email,
-              image: user.image ?? null,
-            },
-            expires: session.expires,
-          };
+        jwt({ account, token }) {
+          if (account) {
+            token.accessToken = account.access_token;
+          }
+          return token;
+        },
+        async session({ session, token }) {
+          session.accessToken = token.accessToken as string;
+          return session;
         },
       },
       providers: [
