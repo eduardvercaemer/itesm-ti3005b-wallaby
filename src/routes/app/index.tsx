@@ -395,7 +395,7 @@ export default component$(() => {
                 </td>
                 <td
                   class={[
-                    "text-center text-md font-bold",
+                    "text-center text-lg font-bold",
                     index % 2 == 0 ? "bg-wallaby-1" : "bg-wallaby-2",
                   ]}
                 >
