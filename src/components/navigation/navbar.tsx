@@ -73,7 +73,7 @@ export const Navbar = component$((props: NavbarProps) => {
             class="avatar btn btn-circle btn-ghost"
           >
             <div class="w-10 rounded-full">
-              {session.value?.user.image ? (
+              {session.value?.user?.image ? (
                 <img
                   height={48}
                   width={48}
