@@ -14,5 +14,5 @@
 11. Blue color on badges text
 12. Test less white background
 13. Align table headers and filters [DONE]
-14. Add header to buttons column, with description
+14. Add header to buttons column, with description [DONE]
 15. Add calendar icon in date selector

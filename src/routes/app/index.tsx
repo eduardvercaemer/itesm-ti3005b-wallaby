@@ -316,24 +316,34 @@ export default component$(() => {
                 />
               </div>
             </th>
-            <th class="flex flex-col items-center gap-1">
-              <span class="text-xl font-bold">Maestro</span>
+            <th>
+              <div class="flex flex-col items-center gap-1">
+                <span class="text-xl font-bold">Maestro</span>
 
-              <select
-                bind:value={teacherFilter}
-                disabled={location.isNavigating}
-                class="select select-bordered select-secondary select-xs w-full max-w-xs"
-              >
-                <option value="">---</option>
+                <select
+                  bind:value={teacherFilter}
+                  disabled={location.isNavigating}
+                  class="select select-bordered select-secondary select-xs w-full max-w-xs"
+                >
+                  <option value="">---</option>
 
-                {schedule.value.teachers.map((t) => (
-                  <option key={t} value={t}>
-                    {t}
-                  </option>
-                ))}
-              </select>
+                  {schedule.value.teachers.map((t) => (
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </th>
-            <th></th>
+
+            <th>
+              <div class="flex flex-col items-center gap-1">
+                <span class="text-xl font-bold">Suplir</span>
+                <span class="hidden xl:flex">
+                  Busca maestros disponibles en este horario.
+                </span>
+              </div>
+            </th>
           </tr>
         </thead>
         <tbody>
