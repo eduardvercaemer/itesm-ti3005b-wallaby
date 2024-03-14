@@ -3,7 +3,7 @@ import { Form, useLocation } from "@builder.io/qwik-city";
 
 import { Waves } from "~/components/waves/waves";
 import NotionLogo from "~/media/Notion.svg?jsx";
-import WallabyLogo from "~/media/Wallaby.svg?jsx";
+import WallabyLogo from "~/media/WallabyVertical.svg?jsx";
 import { useAuthSignin } from "~/routes/plugin@10-auth";
 
 export default component$(() => {
@@ -14,7 +14,7 @@ export default component$(() => {
     <div class="relative h-screen w-screen">
       <div class="relative">
         <div class="flex h-screen items-center justify-around">
-          <div class="rounded-2xl border-8 border-base-100 bg-wallaby-3 px-8 py-32 text-center">
+          <div class="rounded-2xl border-8 border-base-100 bg-primary px-8 py-32 text-center">
             <WallabyLogo />
           </div>
           <div class="flex flex-col items-center gap-16 rounded-2xl border-8 border-base-100 bg-wallaby-2 px-8 py-16 text-center">

@@ -9,6 +9,7 @@ import { IcBaselineAccountCircle } from "~/components/icons/baseline-account-cir
 import { IcBaselinePrivacyTip } from "~/components/icons/baseline-privacy";
 import { IcBaselineRefresh } from "~/components/icons/baseline-refresh";
 import { IcRoundLogOut } from "~/components/icons/round-log-out";
+import WallabyLogo from "~/media/Wallaby.svg?jsx";
 import { useAuthSession, useAuthSignout } from "~/routes/plugin@10-auth";
 
 export interface NavbarProps {
@@ -27,7 +28,7 @@ export const Navbar = component$((props: NavbarProps) => {
     <div class="navbar bg-primary text-primary-content">
       <div class="flex-1">
         <Link href="/app" class="btn btn-ghost text-xl">
-          Wallaby
+          <WallabyLogo class="h-10" />
         </Link>
       </div>
       <div class="flex-none gap-2">
