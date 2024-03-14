@@ -6,6 +6,7 @@ import { Form, Link } from "@builder.io/qwik-city";
 
 import { DatepickerInput } from "~/components/datepicker/datepicker";
 import { IcBaselineAccountCircle } from "~/components/icons/baseline-account-circle";
+import { IcBaselinePrivacyTip } from "~/components/icons/baseline-privacy";
 import { IcBaselineRefresh } from "~/components/icons/baseline-refresh";
 import { IcRoundLogOut } from "~/components/icons/round-log-out";
 import { useAuthSession, useAuthSignout } from "~/routes/plugin@10-auth";
@@ -98,6 +99,16 @@ export const Navbar = component$((props: NavbarProps) => {
             {/*    <IcOutlineSettings />*/}
             {/*  </Link>*/}
             {/*</li>*/}
+            <li>
+              <Link
+                href="https://wallaby.edu.mx/aviso-de-privacidad"
+                target="_blank"
+                class="flex justify-between text-primary"
+              >
+                <span>Aviso de Privacidad</span>
+                <IcBaselinePrivacyTip />
+              </Link>
+            </li>
             <li>
               <Form action={signOut} class="flex">
                 <input type="hidden" name="callbackUrl" value="/" />
