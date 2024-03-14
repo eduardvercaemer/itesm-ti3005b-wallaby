@@ -13,7 +13,7 @@ export default component$(() => {
   return (
     <div class="relative h-screen w-screen">
       <div class="relative">
-        <div class="flex h-screen items-center justify-around opacity-70">
+        <div class="flex h-screen items-center justify-around">
           <div class="rounded-2xl border-8 border-base-100 bg-wallaby-3 px-8 py-32 text-center">
             <WallabyLogo />
           </div>
@@ -26,7 +26,7 @@ export default component$(() => {
                 name="options.callbackUrl"
                 value={location.url.searchParams.get("callbackUrl")}
               />
-              <button type="submit" class="btn btn-primary flex">
+              <button type="submit" class="btn btn-accent btn-lg flex">
                 <NotionLogo class="h-6 w-6" />
                 <span>Continua con Notion</span>
               </button>
