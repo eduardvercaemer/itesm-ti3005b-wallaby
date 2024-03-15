@@ -82,6 +82,11 @@ const scheduleFieldsSchema = z
           options: z.array(z.object({ name: z.string() })),
         }),
       }),
+      Semana: z.object({
+        multi_select: z.object({
+          options: z.array(z.object({ name: z.string() })),
+        }),
+      }),
     }),
   })
   .transform((data) => ({
@@ -92,6 +97,9 @@ const scheduleFieldsSchema = z
       .map((i) => i.name)
       .sort(),
     rooms: data.properties.Salón.multi_select.options.map((i) => i.name).sort(),
+    weeks: data.properties.Semana.multi_select.options
+      .map((i) => i.name)
+      .sort(),
   }));
 
 const scheduleSchema = z.object({
@@ -111,6 +119,7 @@ const scheduleSchema = z.object({
   grades: z.array(z.string()),
   rooms: z.array(z.string()),
   teachers: z.array(z.string()),
+  weeks: z.array(z.string()).optional(),
 });
 
 export async function fetchFullScheduleFromNotion(
@@ -141,13 +150,13 @@ export async function fetchFullScheduleFromNotion(
 
   console.log("> FETCHING SCHEDULE FIELDS");
   const response = await notion.databases.retrieve({ database_id: databaseId });
-  const { grades, rooms, teachers } =
+  const { grades, rooms, teachers, weeks } =
     await scheduleFieldsSchema.parseAsync(response);
 
   console.log(
     `> CLASSES=${classes.length} GRADES=${grades.length} ROOMS=${rooms.length} TEACHERS=${teachers.length}`,
   );
-  const schedule = { classes, grades, rooms, teachers };
+  const schedule = { classes, grades, rooms, weeks, teachers };
 
   await setSchedule(db, JSON.stringify(schedule));
 
