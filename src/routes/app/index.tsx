@@ -16,6 +16,7 @@ import { LoadingScreen } from "~/components/loading/loading-screen";
 import { SettingShowDaysContext } from "~/components/settings-context/setting-show-days-context";
 import { Stats } from "~/components/stats/stats";
 import { getSchedule } from "~/lib/notion";
+import { getWeek } from "~/lib/util";
 import { useRefreshNotionAction } from "~/routes/app/layout";
 import { database } from "~/routes/plugin@01-database";
 
@@ -45,16 +46,27 @@ export const useSchedule = routeLoader$(async (e) => {
     return null;
   }
 
-  const { classes, grades, rooms, teachers } = schedule;
+  const { classes, grades, rooms, teachers, weeks } = schedule;
 
   const dayName = dateString
     ? DAYS[datePlus("12 hours", new Date(dateString)).getDay()]
     : null;
+  const weekName =
+    dateString && weeks
+      ? weeks[getWeek(datePlus("12 hours", new Date(dateString))) % 2]
+      : null;
+
+  console.debug({ weekName });
 
   const filteredClasses = classes
     .filter((c) => {
       if (!dayName) return true;
       return c.day.includes(dayName);
+    })
+    .filter((c) => {
+      if (!weekName) return true;
+      if (!c.week) return true;
+      return c.week.includes(weekName);
     })
     .filter((c) => {
       if (!roomString) return true;
@@ -83,6 +95,11 @@ export const useSchedule = routeLoader$(async (e) => {
     .filter((c) => {
       if (!dayName) return true;
       return c.day.includes(dayName);
+    })
+    .filter((c) => {
+      if (!weekName) return true;
+      if (!c.week) return true;
+      return c.week.includes(weekName);
     })
     .filter((c) => {
       if (!supStartString || !supEndString) return true;

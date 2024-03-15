@@ -34,6 +34,7 @@ const schedulePageSchema = z.object({
           Salón: basicMultiSelectSchema,
           Inicio: basicTextSchema,
           Fin: basicTextSchema,
+          Semana: basicMultiSelectSchema,
           Titulo: z
             .object({
               type: z.literal("title"),
@@ -60,6 +61,7 @@ const schedulePageSchema = z.object({
         room: i.properties["Salón"],
         start: i.properties.Inicio,
         end: i.properties.Fin,
+        week: i.properties.Semana,
       })),
   ),
 });
@@ -114,6 +116,7 @@ const scheduleSchema = z.object({
       room: z.array(z.string()),
       start: z.string(),
       end: z.string(),
+      week: z.array(z.string()).optional(),
     }),
   ),
   grades: z.array(z.string()),
