@@ -233,9 +233,7 @@ export default component$(() => {
           {/*clase*/}
           <col class={[showDays.showDays.value ? "w-[10%]" : "w-[20%]"]} />
           {/*dias*/}
-          {showDays.showDays.value && (
-            <col class={[showDays.showDays.value ? "w-[35%]" : "w-[0%]"]} />
-          )}
+          {showDays.showDays.value && <col class="w-[35%]" />}
           {/*grado*/}
           <col class={[showDays.showDays.value ? "w-[7.5%]" : "w-[10%]"]} />
           {/*salon*/}

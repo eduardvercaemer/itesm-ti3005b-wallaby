@@ -27,6 +27,7 @@ export const DatepickerInput = component$(
 
     return (
       <label class="input input-sm input-bordered flex items-center gap-2 font-bold text-neutral-content">
+        {/** @ts-ignore */}
         <input
           {...props}
           class="grow"
