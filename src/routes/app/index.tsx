@@ -143,6 +143,19 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
+    track(() => location.url.searchParams);
+    const start = location.url.searchParams.get("start");
+    const end = location.url.searchParams.get("end");
+    if (!start) {
+      startFilter.value = undefined;
+    }
+    if (!end) {
+      endFilter.value = undefined;
+    }
+  });
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
     track(() => teacherFilter.value);
     track(() => roomFilter.value);
     track(() => gradeFilter.value);
