@@ -222,6 +222,21 @@ export default component$(() => {
     );
   }
 
+  if (!location.url.searchParams.get("date")) {
+    return (
+      <div class="hero min-h-screen bg-base-200">
+        <div class="hero-content text-center">
+          <div class="max-w-md">
+            <h1 class="text-5xl font-bold">Fecha no Seleccionada</h1>
+            <p class="py-6">
+              Para comenzar selecciona una fecha en la barra de navegación.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div class="m-2 flex grow flex-col items-center gap-4 overflow-auto lg:mx-32">
       <div class="flex justify-around px-8">
